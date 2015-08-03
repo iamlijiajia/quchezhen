@@ -8,10 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
-@interface DetailViewController : UIViewController
+@interface DetailViewController : UIViewController <UIScrollViewDelegate>
 
-@property (strong, nonatomic) id detailItem;
-@property (weak, nonatomic) IBOutlet UILabel *detailDescriptionLabel;
+- (id)initWithDictionary:(NSDictionary *)routeDic;
+
+@property (strong, nonatomic) NSDictionary *detailrouteDic;
+
 
 @end
 

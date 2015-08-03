@@ -9,13 +9,41 @@
 /* Begin PBXBuildFile section */
 		3A8806BF1B40EE9D00F1AEC6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A8806BE1B40EE9D00F1AEC6 /* main.m */; };
 		3A8806C21B40EE9D00F1AEC6 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A8806C11B40EE9D00F1AEC6 /* AppDelegate.m */; };
-		3A8806C51B40EE9D00F1AEC6 /* quchezhen.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3A8806C31B40EE9D00F1AEC6 /* quchezhen.xcdatamodeld */; };
-		3A8806C81B40EE9D00F1AEC6 /* MasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A8806C71B40EE9D00F1AEC6 /* MasterViewController.m */; };
+		3A8806C81B40EE9D00F1AEC6 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A8806C71B40EE9D00F1AEC6 /* HomeViewController.m */; };
 		3A8806CB1B40EE9D00F1AEC6 /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A8806CA1B40EE9D00F1AEC6 /* DetailViewController.m */; };
-		3A8806CE1B40EE9D00F1AEC6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3A8806CC1B40EE9D00F1AEC6 /* Main.storyboard */; };
-		3A8806D01B40EE9D00F1AEC6 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3A8806CF1B40EE9D00F1AEC6 /* Images.xcassets */; };
-		3A8806D31B40EE9D00F1AEC6 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3A8806D11B40EE9D00F1AEC6 /* LaunchScreen.xib */; };
 		3A8806DF1B40EE9E00F1AEC6 /* quchezhenTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A8806DE1B40EE9E00F1AEC6 /* quchezhenTests.m */; };
+		3A94DA911B578FEB0051D9F6 /* CalendarDayCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A94DA801B578FEB0051D9F6 /* CalendarDayCell.m */; };
+		3A94DA921B578FEB0051D9F6 /* CalendarDayModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A94DA821B578FEB0051D9F6 /* CalendarDayModel.m */; };
+		3A94DA931B578FEB0051D9F6 /* CalendarHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A94DA841B578FEB0051D9F6 /* CalendarHomeViewController.m */; };
+		3A94DA941B578FEB0051D9F6 /* CalendarLogic.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A94DA861B578FEB0051D9F6 /* CalendarLogic.m */; };
+		3A94DA951B578FEB0051D9F6 /* CalendarMonthCollectionViewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A94DA881B578FEB0051D9F6 /* CalendarMonthCollectionViewLayout.m */; };
+		3A94DA961B578FEB0051D9F6 /* CalendarMonthHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A94DA8A1B578FEB0051D9F6 /* CalendarMonthHeaderView.m */; };
+		3A94DA971B578FEB0051D9F6 /* CalendarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A94DA8C1B578FEB0051D9F6 /* CalendarViewController.m */; };
+		3A94DA981B578FEB0051D9F6 /* chack.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A94DA8D1B578FEB0051D9F6 /* chack.png */; };
+		3A94DA991B578FEB0051D9F6 /* NSDate+WQCalendarLogic.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A94DA901B578FEB0051D9F6 /* NSDate+WQCalendarLogic.m */; };
+		3A94DA9B1B58F2230051D9F6 /* hotelMap_guyuan.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A94DA9A1B58F2230051D9F6 /* hotelMap_guyuan.png */; };
+		3A94DA9E1B58FAE60051D9F6 /* BookRoomViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A94DA9D1B58FAE60051D9F6 /* BookRoomViewCell.m */; };
+		3AA40D4D1B4D0433006EE241 /* routeGroup.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3AA40D4C1B4D0433006EE241 /* routeGroup.plist */; };
+		3AA40D551B4E7FA6006EE241 /* route.png in Resources */ = {isa = PBXBuildFile; fileRef = 3AA40D541B4E7FA6006EE241 /* route.png */; };
+		3AA40D591B4F6464006EE241 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3AA40D581B4F6464006EE241 /* Default-568h@2x.png */; };
+		3AA40D5E1B4F6577006EE241 /* OwnerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AA40D5D1B4F6577006EE241 /* OwnerViewController.m */; };
+		3AA40D611B4F7749006EE241 /* BookRoomViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AA40D601B4F7749006EE241 /* BookRoomViewController.m */; };
+		3AA40DB21B5394E4006EE241 /* IntroPhotoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AA40DB11B5394E4006EE241 /* IntroPhotoView.m */; };
+		3AA40DB41B54F108006EE241 /* 沽源头图.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3AA40DB31B54F108006EE241 /* 沽源头图.jpg */; };
+		3AA40DBE1B54F124006EE241 /* 滦河神韵1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3AA40DB51B54F124006EE241 /* 滦河神韵1.jpg */; };
+		3AA40DBF1B54F124006EE241 /* 滦河神韵2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3AA40DB61B54F124006EE241 /* 滦河神韵2.jpg */; };
+		3AA40DC01B54F124006EE241 /* 滦河神韵3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3AA40DB71B54F124006EE241 /* 滦河神韵3.jpg */; };
+		3AA40DC11B54F124006EE241 /* 情人谷1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3AA40DB81B54F124006EE241 /* 情人谷1.jpg */; };
+		3AA40DC21B54F124006EE241 /* 情人谷2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3AA40DB91B54F124006EE241 /* 情人谷2.jpg */; };
+		3AA40DC31B54F124006EE241 /* 情人谷3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3AA40DBA1B54F124006EE241 /* 情人谷3.jpg */; };
+		3AA40DC41B54F124006EE241 /* 闪电湖1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3AA40DBB1B54F124006EE241 /* 闪电湖1.jpg */; };
+		3AA40DC51B54F124006EE241 /* 闪电湖2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3AA40DBC1B54F124006EE241 /* 闪电湖2.jpg */; };
+		3AA40DC61B54F124006EE241 /* 闪电湖3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3AA40DBD1B54F124006EE241 /* 闪电湖3.jpg */; };
+		3AE7122B1B677444001F4C99 /* HotelRoomCard.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AE7122A1B677444001F4C99 /* HotelRoomCard.m */; };
+		3AE7122E1B68AB60001F4C99 /* VerifyHotelsOrderBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AE7122D1B68AB60001F4C99 /* VerifyHotelsOrderBar.m */; };
+		3AE7123A1B69C488001F4C99 /* OrderMessageConfirmViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AE712391B69C488001F4C99 /* OrderMessageConfirmViewController.m */; };
+		3AE7123D1B69DAD3001F4C99 /* RoomOrderCellModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AE7123C1B69DAD3001F4C99 /* RoomOrderCellModel.m */; };
+		3AE712401B6B7E06001F4C99 /* PayMethodViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AE7123F1B6B7E06001F4C99 /* PayMethodViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,17 +62,63 @@
 		3A8806BE1B40EE9D00F1AEC6 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		3A8806C01B40EE9D00F1AEC6 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		3A8806C11B40EE9D00F1AEC6 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		3A8806C41B40EE9D00F1AEC6 /* quchezhen.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = quchezhen.xcdatamodel; sourceTree = "<group>"; };
-		3A8806C61B40EE9D00F1AEC6 /* MasterViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MasterViewController.h; sourceTree = "<group>"; };
-		3A8806C71B40EE9D00F1AEC6 /* MasterViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MasterViewController.m; sourceTree = "<group>"; };
+		3A8806C61B40EE9D00F1AEC6 /* HomeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
+		3A8806C71B40EE9D00F1AEC6 /* HomeViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
 		3A8806C91B40EE9D00F1AEC6 /* DetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DetailViewController.h; sourceTree = "<group>"; };
 		3A8806CA1B40EE9D00F1AEC6 /* DetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DetailViewController.m; sourceTree = "<group>"; };
-		3A8806CD1B40EE9D00F1AEC6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		3A8806CF1B40EE9D00F1AEC6 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		3A8806D21B40EE9D00F1AEC6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		3A8806D81B40EE9E00F1AEC6 /* quchezhenTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = quchezhenTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A8806DD1B40EE9E00F1AEC6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3A8806DE1B40EE9E00F1AEC6 /* quchezhenTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = quchezhenTests.m; sourceTree = "<group>"; };
+		3A94DA7F1B578FEB0051D9F6 /* CalendarDayCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CalendarDayCell.h; path = ZFCalendar/CalendarDayCell.h; sourceTree = "<group>"; };
+		3A94DA801B578FEB0051D9F6 /* CalendarDayCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CalendarDayCell.m; path = ZFCalendar/CalendarDayCell.m; sourceTree = "<group>"; };
+		3A94DA811B578FEB0051D9F6 /* CalendarDayModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CalendarDayModel.h; path = ZFCalendar/CalendarDayModel.h; sourceTree = "<group>"; };
+		3A94DA821B578FEB0051D9F6 /* CalendarDayModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CalendarDayModel.m; path = ZFCalendar/CalendarDayModel.m; sourceTree = "<group>"; };
+		3A94DA831B578FEB0051D9F6 /* CalendarHomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CalendarHomeViewController.h; path = ZFCalendar/CalendarHomeViewController.h; sourceTree = "<group>"; };
+		3A94DA841B578FEB0051D9F6 /* CalendarHomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CalendarHomeViewController.m; path = ZFCalendar/CalendarHomeViewController.m; sourceTree = "<group>"; };
+		3A94DA851B578FEB0051D9F6 /* CalendarLogic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CalendarLogic.h; path = ZFCalendar/CalendarLogic.h; sourceTree = "<group>"; };
+		3A94DA861B578FEB0051D9F6 /* CalendarLogic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CalendarLogic.m; path = ZFCalendar/CalendarLogic.m; sourceTree = "<group>"; };
+		3A94DA871B578FEB0051D9F6 /* CalendarMonthCollectionViewLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CalendarMonthCollectionViewLayout.h; path = ZFCalendar/CalendarMonthCollectionViewLayout.h; sourceTree = "<group>"; };
+		3A94DA881B578FEB0051D9F6 /* CalendarMonthCollectionViewLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CalendarMonthCollectionViewLayout.m; path = ZFCalendar/CalendarMonthCollectionViewLayout.m; sourceTree = "<group>"; };
+		3A94DA891B578FEB0051D9F6 /* CalendarMonthHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CalendarMonthHeaderView.h; path = ZFCalendar/CalendarMonthHeaderView.h; sourceTree = "<group>"; };
+		3A94DA8A1B578FEB0051D9F6 /* CalendarMonthHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CalendarMonthHeaderView.m; path = ZFCalendar/CalendarMonthHeaderView.m; sourceTree = "<group>"; };
+		3A94DA8B1B578FEB0051D9F6 /* CalendarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CalendarViewController.h; path = ZFCalendar/CalendarViewController.h; sourceTree = "<group>"; };
+		3A94DA8C1B578FEB0051D9F6 /* CalendarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CalendarViewController.m; path = ZFCalendar/CalendarViewController.m; sourceTree = "<group>"; };
+		3A94DA8D1B578FEB0051D9F6 /* chack.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = chack.png; path = ZFCalendar/chack.png; sourceTree = "<group>"; };
+		3A94DA8E1B578FEB0051D9F6 /* Color.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Color.h; path = ZFCalendar/Color.h; sourceTree = "<group>"; };
+		3A94DA8F1B578FEB0051D9F6 /* NSDate+WQCalendarLogic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSDate+WQCalendarLogic.h"; path = "ZFCalendar/NSDate+WQCalendarLogic.h"; sourceTree = "<group>"; };
+		3A94DA901B578FEB0051D9F6 /* NSDate+WQCalendarLogic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSDate+WQCalendarLogic.m"; path = "ZFCalendar/NSDate+WQCalendarLogic.m"; sourceTree = "<group>"; };
+		3A94DA9A1B58F2230051D9F6 /* hotelMap_guyuan.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hotelMap_guyuan.png; sourceTree = "<group>"; };
+		3A94DA9C1B58FAE60051D9F6 /* BookRoomViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BookRoomViewCell.h; sourceTree = "<group>"; };
+		3A94DA9D1B58FAE60051D9F6 /* BookRoomViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BookRoomViewCell.m; sourceTree = "<group>"; };
+		3AA40D4C1B4D0433006EE241 /* routeGroup.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = routeGroup.plist; sourceTree = "<group>"; };
+		3AA40D541B4E7FA6006EE241 /* route.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = route.png; sourceTree = "<group>"; };
+		3AA40D581B4F6464006EE241 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "../Default-568h@2x.png"; sourceTree = "<group>"; };
+		3AA40D5C1B4F6577006EE241 /* OwnerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OwnerViewController.h; sourceTree = "<group>"; };
+		3AA40D5D1B4F6577006EE241 /* OwnerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OwnerViewController.m; sourceTree = "<group>"; };
+		3AA40D5F1B4F7749006EE241 /* BookRoomViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BookRoomViewController.h; sourceTree = "<group>"; };
+		3AA40D601B4F7749006EE241 /* BookRoomViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BookRoomViewController.m; sourceTree = "<group>"; };
+		3AA40DB01B5394E4006EE241 /* IntroPhotoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IntroPhotoView.h; sourceTree = "<group>"; };
+		3AA40DB11B5394E4006EE241 /* IntroPhotoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IntroPhotoView.m; sourceTree = "<group>"; };
+		3AA40DB31B54F108006EE241 /* 沽源头图.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "沽源头图.jpg"; sourceTree = "<group>"; };
+		3AA40DB51B54F124006EE241 /* 滦河神韵1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "滦河神韵1.jpg"; sourceTree = "<group>"; };
+		3AA40DB61B54F124006EE241 /* 滦河神韵2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "滦河神韵2.jpg"; sourceTree = "<group>"; };
+		3AA40DB71B54F124006EE241 /* 滦河神韵3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "滦河神韵3.jpg"; sourceTree = "<group>"; };
+		3AA40DB81B54F124006EE241 /* 情人谷1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "情人谷1.jpg"; sourceTree = "<group>"; };
+		3AA40DB91B54F124006EE241 /* 情人谷2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "情人谷2.jpg"; sourceTree = "<group>"; };
+		3AA40DBA1B54F124006EE241 /* 情人谷3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "情人谷3.jpg"; sourceTree = "<group>"; };
+		3AA40DBB1B54F124006EE241 /* 闪电湖1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "闪电湖1.jpg"; sourceTree = "<group>"; };
+		3AA40DBC1B54F124006EE241 /* 闪电湖2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "闪电湖2.jpg"; sourceTree = "<group>"; };
+		3AA40DBD1B54F124006EE241 /* 闪电湖3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "闪电湖3.jpg"; sourceTree = "<group>"; };
+		3AE712291B677444001F4C99 /* HotelRoomCard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HotelRoomCard.h; sourceTree = "<group>"; };
+		3AE7122A1B677444001F4C99 /* HotelRoomCard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HotelRoomCard.m; sourceTree = "<group>"; };
+		3AE7122C1B68AB60001F4C99 /* VerifyHotelsOrderBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VerifyHotelsOrderBar.h; sourceTree = "<group>"; };
+		3AE7122D1B68AB60001F4C99 /* VerifyHotelsOrderBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VerifyHotelsOrderBar.m; sourceTree = "<group>"; };
+		3AE712381B69C488001F4C99 /* OrderMessageConfirmViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrderMessageConfirmViewController.h; sourceTree = "<group>"; };
+		3AE712391B69C488001F4C99 /* OrderMessageConfirmViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrderMessageConfirmViewController.m; sourceTree = "<group>"; };
+		3AE7123B1B69DAD3001F4C99 /* RoomOrderCellModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoomOrderCellModel.h; sourceTree = "<group>"; };
+		3AE7123C1B69DAD3001F4C99 /* RoomOrderCellModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoomOrderCellModel.m; sourceTree = "<group>"; };
+		3AE7123E1B6B7E06001F4C99 /* PayMethodViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PayMethodViewController.h; sourceTree = "<group>"; };
+		3AE7123F1B6B7E06001F4C99 /* PayMethodViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PayMethodViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,16 +160,32 @@
 		3A8806BB1B40EE9D00F1AEC6 /* quchezhen */ = {
 			isa = PBXGroup;
 			children = (
+				3A94DA7E1B578FD40051D9F6 /* ZFCalendar */,
 				3A8806C01B40EE9D00F1AEC6 /* AppDelegate.h */,
 				3A8806C11B40EE9D00F1AEC6 /* AppDelegate.m */,
-				3A8806C61B40EE9D00F1AEC6 /* MasterViewController.h */,
-				3A8806C71B40EE9D00F1AEC6 /* MasterViewController.m */,
+				3A8806C61B40EE9D00F1AEC6 /* HomeViewController.h */,
+				3A8806C71B40EE9D00F1AEC6 /* HomeViewController.m */,
 				3A8806C91B40EE9D00F1AEC6 /* DetailViewController.h */,
 				3A8806CA1B40EE9D00F1AEC6 /* DetailViewController.m */,
-				3A8806CC1B40EE9D00F1AEC6 /* Main.storyboard */,
-				3A8806CF1B40EE9D00F1AEC6 /* Images.xcassets */,
-				3A8806D11B40EE9D00F1AEC6 /* LaunchScreen.xib */,
-				3A8806C31B40EE9D00F1AEC6 /* quchezhen.xcdatamodeld */,
+				3A94DA9C1B58FAE60051D9F6 /* BookRoomViewCell.h */,
+				3A94DA9D1B58FAE60051D9F6 /* BookRoomViewCell.m */,
+				3AE7123B1B69DAD3001F4C99 /* RoomOrderCellModel.h */,
+				3AE7123C1B69DAD3001F4C99 /* RoomOrderCellModel.m */,
+				3AE712291B677444001F4C99 /* HotelRoomCard.h */,
+				3AE7122A1B677444001F4C99 /* HotelRoomCard.m */,
+				3AA40D5F1B4F7749006EE241 /* BookRoomViewController.h */,
+				3AA40D601B4F7749006EE241 /* BookRoomViewController.m */,
+				3AE712381B69C488001F4C99 /* OrderMessageConfirmViewController.h */,
+				3AE712391B69C488001F4C99 /* OrderMessageConfirmViewController.m */,
+				3AE7123E1B6B7E06001F4C99 /* PayMethodViewController.h */,
+				3AE7123F1B6B7E06001F4C99 /* PayMethodViewController.m */,
+				3AE7122C1B68AB60001F4C99 /* VerifyHotelsOrderBar.h */,
+				3AE7122D1B68AB60001F4C99 /* VerifyHotelsOrderBar.m */,
+				3AA40D5C1B4F6577006EE241 /* OwnerViewController.h */,
+				3AA40D5D1B4F6577006EE241 /* OwnerViewController.m */,
+				3AA40DB01B5394E4006EE241 /* IntroPhotoView.h */,
+				3AA40DB11B5394E4006EE241 /* IntroPhotoView.m */,
+				3AA40D411B4CFD76006EE241 /* resource */,
 				3A8806BC1B40EE9D00F1AEC6 /* Supporting Files */,
 			);
 			path = quchezhen;
@@ -125,6 +215,60 @@
 				3A8806DD1B40EE9E00F1AEC6 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		3A94DA7E1B578FD40051D9F6 /* ZFCalendar */ = {
+			isa = PBXGroup;
+			children = (
+				3A94DA7F1B578FEB0051D9F6 /* CalendarDayCell.h */,
+				3A94DA801B578FEB0051D9F6 /* CalendarDayCell.m */,
+				3A94DA811B578FEB0051D9F6 /* CalendarDayModel.h */,
+				3A94DA821B578FEB0051D9F6 /* CalendarDayModel.m */,
+				3A94DA831B578FEB0051D9F6 /* CalendarHomeViewController.h */,
+				3A94DA841B578FEB0051D9F6 /* CalendarHomeViewController.m */,
+				3A94DA851B578FEB0051D9F6 /* CalendarLogic.h */,
+				3A94DA861B578FEB0051D9F6 /* CalendarLogic.m */,
+				3A94DA871B578FEB0051D9F6 /* CalendarMonthCollectionViewLayout.h */,
+				3A94DA881B578FEB0051D9F6 /* CalendarMonthCollectionViewLayout.m */,
+				3A94DA891B578FEB0051D9F6 /* CalendarMonthHeaderView.h */,
+				3A94DA8A1B578FEB0051D9F6 /* CalendarMonthHeaderView.m */,
+				3A94DA8B1B578FEB0051D9F6 /* CalendarViewController.h */,
+				3A94DA8C1B578FEB0051D9F6 /* CalendarViewController.m */,
+				3A94DA8D1B578FEB0051D9F6 /* chack.png */,
+				3A94DA8E1B578FEB0051D9F6 /* Color.h */,
+				3A94DA8F1B578FEB0051D9F6 /* NSDate+WQCalendarLogic.h */,
+				3A94DA901B578FEB0051D9F6 /* NSDate+WQCalendarLogic.m */,
+			);
+			name = ZFCalendar;
+			sourceTree = "<group>";
+		};
+		3AA40D411B4CFD76006EE241 /* resource */ = {
+			isa = PBXGroup;
+			children = (
+				3AA40DC71B54F12C006EE241 /* guyuan_img */,
+				3AA40D541B4E7FA6006EE241 /* route.png */,
+				3AA40D4C1B4D0433006EE241 /* routeGroup.plist */,
+				3AA40D581B4F6464006EE241 /* Default-568h@2x.png */,
+			);
+			name = resource;
+			sourceTree = "<group>";
+		};
+		3AA40DC71B54F12C006EE241 /* guyuan_img */ = {
+			isa = PBXGroup;
+			children = (
+				3A94DA9A1B58F2230051D9F6 /* hotelMap_guyuan.png */,
+				3AA40DB31B54F108006EE241 /* 沽源头图.jpg */,
+				3AA40DB51B54F124006EE241 /* 滦河神韵1.jpg */,
+				3AA40DB61B54F124006EE241 /* 滦河神韵2.jpg */,
+				3AA40DB71B54F124006EE241 /* 滦河神韵3.jpg */,
+				3AA40DB81B54F124006EE241 /* 情人谷1.jpg */,
+				3AA40DB91B54F124006EE241 /* 情人谷2.jpg */,
+				3AA40DBA1B54F124006EE241 /* 情人谷3.jpg */,
+				3AA40DBB1B54F124006EE241 /* 闪电湖1.jpg */,
+				3AA40DBC1B54F124006EE241 /* 闪电湖2.jpg */,
+				3AA40DBD1B54F124006EE241 /* 闪电湖3.jpg */,
+			);
+			name = guyuan_img;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -207,9 +351,21 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3A8806CE1B40EE9D00F1AEC6 /* Main.storyboard in Resources */,
-				3A8806D31B40EE9D00F1AEC6 /* LaunchScreen.xib in Resources */,
-				3A8806D01B40EE9D00F1AEC6 /* Images.xcassets in Resources */,
+				3AA40D4D1B4D0433006EE241 /* routeGroup.plist in Resources */,
+				3AA40DC41B54F124006EE241 /* 闪电湖1.jpg in Resources */,
+				3AA40DBE1B54F124006EE241 /* 滦河神韵1.jpg in Resources */,
+				3A94DA981B578FEB0051D9F6 /* chack.png in Resources */,
+				3AA40DC61B54F124006EE241 /* 闪电湖3.jpg in Resources */,
+				3A94DA9B1B58F2230051D9F6 /* hotelMap_guyuan.png in Resources */,
+				3AA40D591B4F6464006EE241 /* Default-568h@2x.png in Resources */,
+				3AA40DBF1B54F124006EE241 /* 滦河神韵2.jpg in Resources */,
+				3AA40DC31B54F124006EE241 /* 情人谷3.jpg in Resources */,
+				3AA40D551B4E7FA6006EE241 /* route.png in Resources */,
+				3AA40DC01B54F124006EE241 /* 滦河神韵3.jpg in Resources */,
+				3AA40DC51B54F124006EE241 /* 闪电湖2.jpg in Resources */,
+				3AA40DB41B54F108006EE241 /* 沽源头图.jpg in Resources */,
+				3AA40DC11B54F124006EE241 /* 情人谷1.jpg in Resources */,
+				3AA40DC21B54F124006EE241 /* 情人谷2.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -227,11 +383,27 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3AE7122E1B68AB60001F4C99 /* VerifyHotelsOrderBar.m in Sources */,
+				3A94DA9E1B58FAE60051D9F6 /* BookRoomViewCell.m in Sources */,
 				3A8806CB1B40EE9D00F1AEC6 /* DetailViewController.m in Sources */,
-				3A8806C81B40EE9D00F1AEC6 /* MasterViewController.m in Sources */,
-				3A8806C51B40EE9D00F1AEC6 /* quchezhen.xcdatamodeld in Sources */,
+				3A94DA991B578FEB0051D9F6 /* NSDate+WQCalendarLogic.m in Sources */,
+				3AA40DB21B5394E4006EE241 /* IntroPhotoView.m in Sources */,
+				3AE7122B1B677444001F4C99 /* HotelRoomCard.m in Sources */,
+				3A94DA921B578FEB0051D9F6 /* CalendarDayModel.m in Sources */,
+				3AE712401B6B7E06001F4C99 /* PayMethodViewController.m in Sources */,
+				3AA40D5E1B4F6577006EE241 /* OwnerViewController.m in Sources */,
+				3AA40D611B4F7749006EE241 /* BookRoomViewController.m in Sources */,
+				3AE7123D1B69DAD3001F4C99 /* RoomOrderCellModel.m in Sources */,
+				3A94DA931B578FEB0051D9F6 /* CalendarHomeViewController.m in Sources */,
+				3A94DA971B578FEB0051D9F6 /* CalendarViewController.m in Sources */,
+				3A94DA911B578FEB0051D9F6 /* CalendarDayCell.m in Sources */,
+				3A8806C81B40EE9D00F1AEC6 /* HomeViewController.m in Sources */,
 				3A8806C21B40EE9D00F1AEC6 /* AppDelegate.m in Sources */,
+				3A94DA961B578FEB0051D9F6 /* CalendarMonthHeaderView.m in Sources */,
+				3AE7123A1B69C488001F4C99 /* OrderMessageConfirmViewController.m in Sources */,
+				3A94DA941B578FEB0051D9F6 /* CalendarLogic.m in Sources */,
 				3A8806BF1B40EE9D00F1AEC6 /* main.m in Sources */,
+				3A94DA951B578FEB0051D9F6 /* CalendarMonthCollectionViewLayout.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -252,25 +424,6 @@
 			targetProxy = 3A8806D91B40EE9E00F1AEC6 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
-
-/* Begin PBXVariantGroup section */
-		3A8806CC1B40EE9D00F1AEC6 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				3A8806CD1B40EE9D00F1AEC6 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		3A8806D11B40EE9D00F1AEC6 /* LaunchScreen.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				3A8806D21B40EE9D00F1AEC6 /* Base */,
-			);
-			name = LaunchScreen.xib;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		3A8806E01B40EE9E00F1AEC6 /* Debug */ = {
@@ -353,6 +506,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				INFOPLIST_FILE = quchezhen/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -422,6 +576,7 @@
 				3A8806E41B40EE9E00F1AEC6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		3A8806E51B40EE9E00F1AEC6 /* Build configuration list for PBXNativeTarget "quchezhenTests" */ = {
 			isa = XCConfigurationList;
@@ -430,21 +585,9 @@
 				3A8806E71B40EE9E00F1AEC6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCVersionGroup section */
-		3A8806C31B40EE9D00F1AEC6 /* quchezhen.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				3A8806C41B40EE9D00F1AEC6 /* quchezhen.xcdatamodel */,
-			);
-			currentVersion = 3A8806C41B40EE9D00F1AEC6 /* quchezhen.xcdatamodel */;
-			path = quchezhen.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
-/* End XCVersionGroup section */
 	};
 	rootObject = 3A8806B11B40EE9D00F1AEC6 /* Project object */;
 }
