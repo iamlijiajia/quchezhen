@@ -15,56 +15,106 @@
 @property (nonatomic , strong) NSMutableArray *cellArray;
 @property (strong , nonatomic) VerifyHotelsOrderBar *orderBar;
 
+//@property (nonatomic , strong) NSMutableArray *hotelCitys;
+
+@property (nonatomic , strong) UITableView *tableView;
+
 @end
 
 @implementation BookRoomViewController
 
+- (id)initWithDictionary:(NSDictionary *)dic
+{
+    self = [super init];
+    
+    if (self)
+    {
+        self.dataModel = [[RoomOrdersDataModel alloc] initWithDictionary:dic];
+        self.cellArray = [NSMutableArray arrayWithCapacity:5];
+    }
+    
+    return self;
+}
+
+- (id)initWithDataModel:(RoomOrdersDataModel *)model
+{
+    self = [super init];
+    if (self)
+    {
+        self.dataModel = model;
+        self.cellArray = [NSMutableArray arrayWithCapacity:5];
+    }
+    
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    CGRect frame = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.x, self.view.frame.size.width, self.view.frame.size.height - 45);
+    self.tableView = [[UITableView alloc] initWithFrame:frame style:UITableViewStyleGrouped];
+    self.tableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 5, 5)]; //更改header高度
+    self.tableView.sectionHeaderHeight = 2;
+    self.tableView.sectionFooterHeight = 5;
+    self.tableView.dataSource = self;
+    self.tableView.delegate = self;
+    
+    [self.view addSubview:self.tableView];
+    
     self.view.backgroundColor = [UIColor whiteColor];
     self.title = @"住宿安排";//[self.detailrouteDic objectForKey:@"name"];
-    
-    UIImageView *bgImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
-    [self.view addSubview:bgImageView];
-    
-    float contentoffsizeHeight = 64;//self.navigationController.navigationBar.frame.size.height;
-    
-    UIScrollView *scrollview = [[UIScrollView alloc] initWithFrame:CGRectMake(0, contentoffsizeHeight, self.view.frame.size.width, self.view.frame.size.height)];
-    scrollview.pagingEnabled = YES;
-//    scrollview.delegate = self;
-    scrollview.layer.borderWidth = 0.5f;
-    scrollview.layer.borderColor = [UIColor colorWithWhite:0.8 alpha:1].CGColor;
-    scrollview.showsHorizontalScrollIndicator = YES;
-//    scrollview.layer.cornerRadius = 2;
-    [self.view addSubview:scrollview];
-    
-    
-    self.cellArray = [NSMutableArray arrayWithCapacity:5];
-    NSArray *hotelCitys = [self.detailrouteDic objectForKey:@"city_of_hotel_Info"];
-    
-    NSInteger height = 0;
+
     NSInteger oneDay = 60*60*24;
-    for (NSInteger i = 0; i < hotelCitys.count; i++)
+    NSInteger index = 0;
+    for (BookRoomViewCellDataModel *model in self.dataModel.CitiesCellViewModelArray)
     {
-        NSDictionary *hotelsinfo = [hotelCitys objectAtIndex:i];
-        BookRoomViewCell *cell = [[BookRoomViewCell alloc] initWithRoomsDictionary:hotelsinfo Date:[self.beginDate dateByAddingTimeInterval:oneDay*i] andFrameWith:self.view.frame.size.width];
+        BookRoomViewCell *cell = [[BookRoomViewCell alloc] initWithDataModel:model Date:[self.beginDate dateByAddingTimeInterval:oneDay*index] andFrameWith:self.tableView.frame.size.width];
         cell.delegate = self;
-        cell.index = i;
-        cell.frame = CGRectMake(0, height, cell.width, cell.height);
-        height += cell.height + 5;
+        cell.index = index;
         
         [self.cellArray addObject:cell];
-        
-        [scrollview addSubview:cell];
     }
-    
-    scrollview.contentSize = CGSizeMake(self.view.frame.size.width , height+contentoffsizeHeight);
     
     self.orderBar = [[VerifyHotelsOrderBar alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 45, self.view.frame.size.width, 45)];
     self.orderBar.delegate = self;
     [self.view addSubview:self.orderBar];
+    [self orderChanged];
 }
+
+
+
+#pragma mark - Table View
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return self.dataModel.CitiesCellViewModelArray.count;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return 1;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section >= self.cellArray.count)
+    {
+        return nil;
+    }
+    
+    BookRoomViewCell *cell = cell = [self.cellArray objectAtIndex:indexPath.section];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    
+    return cell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    BookRoomViewCell *cell = cell = [self.cellArray objectAtIndex:indexPath.section];
+    return cell.height;
+}
+
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -73,8 +123,6 @@
 
 - (void)dateChangedOnCellIndex:(NSInteger)index
 {
-    [self orderChanged];
-    
     for (NSInteger i = index; i + 1 < self.cellArray.count; i++)
     {
         BookRoomViewCell *cell = [self.cellArray objectAtIndex:i];
@@ -83,44 +131,22 @@
         NSInteger oneDay = 60*60*24;
         
         cellNext.beginDate = cell.endDate;
-        cellNext.endDate = [cellNext.endDate dateByAddingTimeInterval:oneDay * cellNext.orderModel.durationDays];
+        cellNext.endDate = [cellNext.endDate dateByAddingTimeInterval:oneDay * cellNext.dataModel.durationDays];
     }
+    
+    [self orderChanged];
 }
 
 - (void)orderChanged
 {
-    NSInteger priceAll = 0;
-    NSInteger daysAll = 0;
-    NSString *checkinDate = nil;
-    
-    for (NSInteger i=0; i < self.cellArray.count; i++)
-    {
-        BookRoomViewCell *cell = [self.cellArray objectAtIndex:i];
-        
-        if (0 == i)
-        {
-            checkinDate = cell.orderModel.orderCheckinDate;
-        }
-        priceAll += cell.orderModel.orderPrice * cell.orderModel.orderRoomsCount * cell.orderModel.durationDays;
-        daysAll += cell.orderModel.durationDays;
-    }
-    
-    self.orderBar.price = priceAll;
-    self.orderBar.daysCount = daysAll;
-    self.orderBar.checkinDate = checkinDate;
+    self.orderBar.price = self.dataModel.orderPrice;
+    self.orderBar.daysCount = self.dataModel.durationDays;
+    self.orderBar.checkinDate = self.dataModel.orderCheckinDate;
 }
 
 - (void)onVerifyOrderButtonPressed
 {
-    OrderMessageConfirmViewController *viewController = [[OrderMessageConfirmViewController alloc] init];
-    NSMutableArray *modelArray = [NSMutableArray arrayWithCapacity:5];
-    for (NSInteger i=0; i < self.cellArray.count; i++)
-    {
-        RoomOrderCellModel *model = ((BookRoomViewCell *)[self.cellArray objectAtIndex:i]).orderModel;
-        [modelArray addObject:model];
-    }
-    viewController.orderModelArray = modelArray;
-    
+    OrderMessageConfirmViewController *viewController = [[OrderMessageConfirmViewController alloc] initWithDataModel:self.dataModel];
     [self.navigationController pushViewController:viewController animated:YES];
 }
 

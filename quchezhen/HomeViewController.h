@@ -11,7 +11,5 @@
 
 @interface HomeViewController : UITableViewController
 
-@property (strong, nonatomic) NSArray *introArray;
-
 @end
 

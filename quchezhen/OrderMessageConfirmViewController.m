@@ -8,34 +8,42 @@
 
 #import "OrderMessageConfirmViewController.h"
 #import "VerifyHotelsOrderBar.h"
+#import "BookRoomViewCellDataModel.h"
+#import "PayMethodViewController.h"
+
+#import "BCPay.h"
 
 //
 #define Tag_SetNameField        1000
 #define Tag_SetTelField         2000
 
 
-@interface OrderMessageConfirmViewController ()<VerifyHotelsOrderBarDelegate , UITextFieldDelegate>
+@interface OrderMessageConfirmViewController ()<VerifyHotelsOrderBarDelegate , UITextFieldDelegate , BCApiDelegate, UIActionSheetDelegate>
 
 @property (strong , nonatomic) UITableView *tableView;
 @property (strong , nonatomic) VerifyHotelsOrderBar *orderBar;
 
-@property (nonatomic) NSInteger priceAll;
-@property (nonatomic) NSInteger daysAll;
-@property (nonatomic) NSString *checkinDate;
-@property (nonatomic) NSInteger maxRoomsNumber;
+@property (nonatomic , strong) RoomOrdersDataModel *dataModel;
 
 @end
 
 @implementation OrderMessageConfirmViewController
 
+- (id)initWithDataModel:(RoomOrdersDataModel *)model
+{
+    self = [super init];
+    if (self)
+    {
+        self.dataModel = model;
+    }
+    
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+
+    self.title = @"信息填写";
     
     self.tableView = [[UITableView alloc] initWithFrame:self.view.frame style:UITableViewStyleGrouped];
     self.tableView.dataSource = self;
@@ -47,36 +55,28 @@
     [self.view addSubview:self.tableView];
     
     [self createVerifyOrdersBar];
+    
+    [BCPay setBCApiDelegate:self];
+    
+    UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onViewPressed:)];
+    [self.view addGestureRecognizer:recognizer];
 }
 
--(void)setOrderModelArray:(NSMutableArray *)orderModelArray
+- (void)onViewPressed:(id)sender
 {
-    if (_orderModelArray != orderModelArray)
+    for (int i = 0; i < self.dataModel.orderRoomsCount; i++)
     {
-        _orderModelArray = orderModelArray;
-        
-        if (_orderModelArray == nil)
+        UITextField *field = (UITextField *)[self.tableView viewWithTag:Tag_SetNameField + i];
+        if (field)
         {
-            return;
+            [field resignFirstResponder];
         }
-        
-        for (NSInteger i=0; i < _orderModelArray.count; i++)
-        {
-            RoomOrderCellModel *orderModel = [_orderModelArray objectAtIndex:i];
-            
-            if (0 == i)
-            {
-                self.checkinDate = orderModel.orderCheckinDate;
-                self.maxRoomsNumber = orderModel.orderRoomsCount;
-            }
-            self.priceAll += orderModel.orderPrice * orderModel.orderRoomsCount * orderModel.durationDays;
-            self.daysAll += orderModel.durationDays;
-            
-            if (orderModel.orderRoomsCount > self.maxRoomsNumber)
-            {
-                self.maxRoomsNumber = orderModel.orderRoomsCount;
-            }
-        }
+    }
+    
+    UITextField *field = (UITextField *)[self.tableView viewWithTag:Tag_SetTelField];
+    if (field)
+    {
+        [field resignFirstResponder];
     }
 }
 
@@ -85,9 +85,9 @@
     self.orderBar = [[VerifyHotelsOrderBar alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 45, self.view.frame.size.width, 45)];
     self.orderBar.delegate = self;
 
-    self.orderBar.price = self.priceAll;
-    self.orderBar.daysCount = self.daysAll;
-    self.orderBar.checkinDate = self.checkinDate;
+    self.orderBar.price = self.dataModel.orderPrice;
+    self.orderBar.daysCount = self.dataModel.durationDays;
+    self.orderBar.checkinDate = self.dataModel.orderCheckinDate;
     
     [self.view addSubview:self.orderBar];
 }
@@ -111,7 +111,7 @@
     {
         case 0:
             
-            return self.maxRoomsNumber;
+            return self.dataModel.orderRoomsCount;
             
         case 1:
             return 1;
@@ -184,7 +184,7 @@
             setTelField = [[UITextField alloc]initWithFrame:CGRectMake(120, 0, self.view.frame.size.width - 140, 40)];
             setTelField.backgroundColor = [UIColor clearColor];
             setTelField.delegate = self;
-            setTelField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
+            setTelField.keyboardType = UIKeyboardTypeNumberPad;
             setTelField.clearButtonMode = UITextFieldViewModeWhileEditing;
             setTelField.placeholder = @"请填写联系人电话";
             setTelField.autocorrectionType = UITextAutocorrectionTypeNo;
@@ -210,6 +210,7 @@
     
     return nil;
 }
+
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
     if (1 == section)
@@ -271,7 +272,106 @@
 
 - (void)onVerifyOrderButtonPressed
 {
+    if ([self textFieldBeFinished])
+    {
+        NSString *title = [NSString stringWithFormat:@"共需支付: %ld 元",(long)self.dataModel.orderPrice];
+        UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:title delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"微信支付" otherButtonTitles:@"支付宝支付",@"银联支付", nil];
+        
+        [sheet showInView:self.view];
+    }
+    else
+    {
+        [self showAlertView:@"请完善行程信息，谢谢！"];
+    }
     
+//    PayMethodViewController *viewController = [[PayMethodViewController alloc] initWithDataModel:self.dataModel];
+//    [self.navigationController pushViewController:viewController animated:YES];
+    
+}
+
+- (BOOL)textFieldBeFinished
+{
+    for (int i = 0; i < self.dataModel.orderRoomsCount; i++)
+    {
+        UITextField *field = (UITextField *)[self.tableView viewWithTag:Tag_SetNameField + i];
+        if (!field || !field.text.length)
+        {
+            return NO;
+        }
+    }
+    
+    UITextField *field = (UITextField *)[self.tableView viewWithTag:Tag_SetTelField];
+    if (!field || field.text.length < 8)
+    {
+        return NO;
+    }
+    
+    return YES;
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    NSString *outTradeNo = @"1234567890";//[self genOutTradeNo];
+    NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"value",@"key", nil];
+    
+    BCPayReq *payReq = [[BCPayReq alloc] init];
+    payReq.title = @"BeeCloud自制白开水";
+    payReq.totalfee = @"1";
+    payReq.billno = outTradeNo;
+    payReq.scheme = @"payDemo";
+    payReq.viewController = self;
+    payReq.optional = dict;
+    
+    switch (buttonIndex)
+    {
+        case 0:
+            payReq.channel = WX;
+            [BCPay sendBCReq:payReq];
+            break;
+        case 1:
+            payReq.channel = Ali;
+            [BCPay sendBCReq:payReq];
+            break;
+        case 2:
+            payReq.channel = Union;
+            [BCPay sendBCReq:payReq];
+            break;
+        default:
+            break;
+    }
+}
+
+- (void)onBCPayResp:(BCBaseResp *)resp {
+    if ([resp isKindOfClass:[BCQueryResp class]])
+    {
+        if (resp.result_code == 0)
+        {
+            BCQueryResp *tempResp = (BCQueryResp *)resp;
+            if (tempResp.count == 0)
+            {
+                [self showAlertView:@"未找到相关订单信息"];
+            }
+            else
+            {
+//                self.payList = tempResp.results;
+                [self performSegueWithIdentifier:@"queryResult" sender:self];
+            }
+        }
+    }
+    else
+    {
+        if (resp.result_code == 0) {
+            [self showAlertView:resp.result_msg];
+        } else {
+            [self showAlertView:resp.err_detail];
+        }
+    }
+}
+
+
+- (void)showAlertView:(NSString *)msg {
+    UIAlertView* alert = [[UIAlertView alloc]initWithTitle:@"提示" message:msg delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+    [alert show];
 }
 
 
@@ -281,7 +381,7 @@
 {
     if (textField.tag < Tag_SetTelField)//是姓名field
     {
-        if ((textField.tag - Tag_SetNameField) == self.maxRoomsNumber - 1)//最后一个姓名填写
+        if ((textField.tag - Tag_SetNameField) == self.dataModel.orderRoomsCount - 1)//最后一个姓名填写
         {
             UITextField *field = (UITextField *)[self.tableView viewWithTag:Tag_SetTelField];
             [field becomeFirstResponder];

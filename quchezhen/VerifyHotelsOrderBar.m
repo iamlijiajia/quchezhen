@@ -57,7 +57,7 @@
         
         self.price = 0;
         self.daysCount = 0;
-        self.checkinDate = nil;
+        self.checkinDate = @"";
     }
     
     return self;
@@ -73,16 +73,19 @@
 
 - (void)setPrice:(NSInteger)price
 {
+    _price = price;
     self.priceLabel.text = [NSString stringWithFormat:@"共计费用: %ld 元" , (long)price];
 }
 
 - (void)setDaysCount:(NSInteger)daysCount
 {
+    _daysCount = daysCount;
     self.daysCountLabel.text = [NSString stringWithFormat:@"共计入住: %ld 晚" , (long)daysCount];
 }
 
 - (void)setCheckinDate:(NSString *)checkinDate
 {
+    _checkinDate = checkinDate;
     self.chekinDateLabel.text = [NSString stringWithFormat:@"首晚入住时间: %@" , checkinDate];
 }
 /*

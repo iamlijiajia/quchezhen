@@ -11,7 +11,9 @@
 @interface IntroPhotoView : UIView <UIScrollViewDelegate>
 
 - (id)initWithImages:(NSArray*)images andFrame:(CGRect)frame;
-
 - (id)initWithImageNames:(NSArray*)nameStrings andFrame:(CGRect)frame;
+
+- (id)initWithImages:(NSArray*)images Discriptions:(NSArray *)discriptions andFrame:(CGRect)frame;
+- (id)initWithImageNames:(NSArray*)imageNames Discriptions:(NSArray *)discriptions andFrame:(CGRect)frame;
 
 @end

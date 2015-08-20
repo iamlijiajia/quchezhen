@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "RoomOrderCellModel.h"
+#import "BookRoomViewCellDataModel.h"
 
 @protocol BookRoomViewCellDelegate <NSObject>
 
@@ -16,14 +16,15 @@
 
 @end
 
-@interface BookRoomViewCell : UIView
+@interface BookRoomViewCell : UITableViewCell
 
 @property (strong , nonatomic) id<BookRoomViewCellDelegate> delegate;
 @property (nonatomic) NSInteger height;
 @property (nonatomic) NSInteger width;
 @property (nonatomic) NSInteger index;
 
-@property (strong , nonatomic) RoomOrderCellModel *orderModel;
+//@property (strong , nonatomic) RoomOrderCellModel *orderModel;
+@property (strong , nonatomic) BookRoomViewCellDataModel *dataModel;
 
 @property (strong , nonatomic) NSDate *beginDate;
 @property (strong , nonatomic) NSDate *endDate;
@@ -35,6 +36,8 @@
 //@property (nonatomic)NSInteger orderRoomsCount; //订购的房间总数
 //@property (nonatomic)NSString *orderCheckinDate;    //订单开始日期，与beginDate日期相同
 
-- (id)initWithRoomsDictionary:(NSDictionary *)dic Date:(NSDate *)date andFrameWith:(NSInteger)width;
+- (id)initWithDataModel:(BookRoomViewCellDataModel *)dataModel Date:(NSDate *)date andFrameWith:(NSInteger)width;
+
+//- (id)initWithRoomsDictionary:(NSDictionary *)dic Date:(NSDate *)date andFrameWith:(NSInteger)width;
 
 @end

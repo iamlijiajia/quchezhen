@@ -1,0 +1,48 @@
+==== INTRO ====
+
+SafeBlock 用于解决采用block时的内存管理混乱的问题，包括：
+1、block会retain当前obj，导致obj无法即时dealloc的问题
+2、如果使用__block的方式，block不会retain当前obj，但是当block执行时，对应的obj可能已经被释放的问题
+
+
+==== API ====
+
+SafeBlock对GCD进行了简单的包装，对外提供两个GCD的方法：
+void dispatch_async_safe(NSString *safeBlockIdentifier, dispatch_queue_t queue, dispatch_block_t block);
+void dispatch_after_safe(NSString *safeBlockIdentifier, dispatch_time_t when, dispatch_queue_t queue, dispatch_block_t block);
+其中safeBlockIdentifier是SafeBlock为obj所生成的identifier，后面的参数为原GCD的对应方法所需要的参数
+
+SafeBlock还提供了以下方法，用于判断某个对象是否还存在：
+BOOL is_safe_block_object_still_alive(NSString *safeBlockIdentifier);
+
+获取一个对象的safeBlockIdentifier：
+- (NSString *)safeBlockIdentifier;//NSObject Category
+
+为对象添加dealloc时会执行的block：
+typedef void (^SafeBlockDeallocBlock)(NSString *identifier);
+- (void)setSafeBlockDeallocBlock:(SafeBlockDeallocBlock)deallocBlock;//NSObject Category
+
+
+==== TUTORIAL ====
+
+用GCD时可以直接使用上面的两个GCD包装方法。
+
+如果是直接使用block（只有会异步执行的block才需要关心内存的问题，同步的block没有这个问题）时，请注意以下几点：
+1、在block内部不要直接使用self、或者使用self的某个属性，这样可以保证block不会对self执行retain操作
+2、在合适的地方记录下来block对应的obj的safeBlockIdentifier之间的关系
+3、在block开始执行之前，先通过 is_safe_block_object_still_alive 方法判断对应的obj是否还存在，如果存在才继续执行block
+4、当一个safeBlockObject释放的时候，需要能够将它的identifier所关联的所有block删除
+
+以SNNetworking为例：
+1、VC中通过SNNetworking发送请求时，会同时将自己的safeBlockIdentifier（通过[self safeBlockIdentifier]获取）以及相应的 successBlock 和 failureBlock 传给SNNetworking。注意 successBlock 和 failureBlock 中都不会直接使用self，而是使用blockSelf
+2、SNNetworking采用Dictionary记录下来safeBlockIdentifier与每个请求的映射。注意一个safeBlockIdentifier可能会对应多个请求。
+3、当每个请求回来时，先取出对应的safeBlockIdentifier并通过 is_safe_block_object_still_alive 判断VC是否还存在。如果存在，则执行 successBlock / failureBlock ，否则直接结束请求。
+4、SNNetworking提供一个按照identifier来cancel所有关联request的方法，方便VC释放的时候能够停止所有请求
+4、在VC释放的时候，通知SNNetworking停止所有由自己发出的请求。
+	4.1、VC（也就是SafeBlock对象）释放的时候，会发出一个通知。只需要在SNNetworking中打开该通知（设置client的handleSafeBlockObjectDeallocNotification属性）就可以监控到SafeBlockObject被dealloc的事件，然后自己去cancel掉所有由这个对象发出的请求
+	4.2、SafeBlock对象释放时，如果定义了safeBlockDeallocBlock则会先执行这个block。所以可以在VC初始化的时候，设置自己的safeBlockDeallocBlock，并在其中调用SNNetworking的相关方法停止自己发出的所有请求。
+	第一个实现方式的优点是方便，SafeBlock对象释放时，SNNetworking能自动停止所有关联请求。第二种方式的优点是高效，只有自己定义了safeBlockDeallocBlock并实现相应逻辑的对象才会取消SNNetworking的请求。
+
+
+
+*SNNetworking: https://svn.intra.sina.com.cn/wap/trunk/client/project/cocoalibrary/SNNetworking/

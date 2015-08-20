@@ -7,11 +7,11 @@
 //
 
 #import "BookRoomViewCell.h"
-#import "NSDate+WQCalendarLogic.h"
 #import "CalendarHomeViewController.h"
-#import "HotelRoomCard.h"
+#import "HotelCard.h"
+#import "UIImageView+BmobDownLoad.h"
 
-@interface BookRoomViewCell ()<HotelRoomCardDelegate>
+@interface BookRoomViewCell ()<HotelCardDelegate>
 
 @property (strong , nonatomic) UILabel *checkinDateLabel;
 @property (strong , nonatomic) UILabel *daysCount;
@@ -22,37 +22,39 @@
 
 @implementation BookRoomViewCell
 
-- (id)initWithRoomsDictionary:(NSDictionary *)dic Date:(NSDate *)date andFrameWith:(NSInteger)width
+- (id)initWithDataModel:(BookRoomViewCellDataModel *)dataModel Date:(NSDate *)date andFrameWith:(NSInteger)width
 {
     self = [super init];
     if (self)
     {
-        self.orderModel = [[RoomOrderCellModel alloc] init];
+        self.dataModel = dataModel;
         
         self.beginDate = date;
         self.endDate = [self nextDayFromDate:date];
-        self.orderModel.durationDays = 1;
-        self.orderModel.orderRoomInfo = Nil;
+        self.dataModel.durationDays = 1;
+        self.dataModel.orderHotelInfo = Nil;
         self.hotelCardArray = [NSMutableArray arrayWithCapacity:5];
         
         self.width = width;
-        self.height = 20;
+        self.height = 30;
         CGRect checkinButtonRect = CGRectMake(0, 0, width, self.height);
         [self createCheckinDateButtonWithFrame:checkinButtonRect];
         
-        UIImage *map = [UIImage imageNamed:[dic objectForKey:@"hotelMapImage"]];
-        UIImageView *mapView = [[UIImageView alloc] initWithFrame:CGRectMake(0, self.height, width, 200)];
-        mapView.image = map;
+//        UIImage *map = [UIImage imageNamed:dataModel.mapName];
+//        UIImageView *mapView = [[UIImageView alloc] initWithFrame:CGRectMake(0, self.height, width, 200)];
+        
+        UIImageView *mapView = [[UIImageView alloc] initWithDefaultImage:nil NewImageName:dataModel.mapName andFrame:CGRectMake(0, self.height, width, 200)];
+        
+//        mapView.image = map;
         [self addSubview:mapView];
         self.height += 200;
-        
-        NSArray *hotelsArray = [dic objectForKey:@"hotelInfo"];
-        for (int i = 0; i < hotelsArray.count; i++)
+
+        NSInteger i = 0;
+        for (HotelCardDataModel *model in self.dataModel.hotelCardDataModels)
         {
-            NSDictionary *hotelInfo = [hotelsArray objectAtIndex:i];
-            [self createHotelChooseCard:hotelInfo cardIndex:i];
+            [self createHotelChooseCard:model cardIndex:i];
+            i++;
         }
-        
     }
     
     return self;
@@ -61,7 +63,7 @@
 - (void)createCheckinDateButtonWithFrame:(CGRect)frame
 {
     UIImageView *bgImageV = [[UIImageView alloc]initWithFrame:frame];
-    bgImageV.backgroundColor = [UIColor yellowColor];
+    bgImageV.image = [UIImage imageNamed:@"navigationbar_background.png"];
     [self addSubview:bgImageV];
     
     self.checkinDateLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 0 , frame.size.width, frame.size.height)];
@@ -76,8 +78,10 @@
     [self addSubview:checkinDate];
     
     UIButton *LessDay = [UIButton buttonWithType:UIButtonTypeCustom];
-    LessDay.backgroundColor = [UIColor grayColor];
+    LessDay.backgroundColor = [UIColor clearColor];
+    [LessDay setImage:[UIImage imageNamed:@"less.png"] forState:UIControlStateNormal];
     LessDay.frame = CGRectMake(frame.size.width - 130, 0, 30, frame.size.height);
+    LessDay.imageEdgeInsets = UIEdgeInsetsMake(3, 3, 3, 3);
     [LessDay addTarget:self action:@selector(lessDayButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:LessDay];
     
@@ -88,22 +92,33 @@
     [self addSubview:self.daysCount];
     
     UIButton *oneMoreDay = [UIButton buttonWithType:UIButtonTypeCustom];
-    oneMoreDay.backgroundColor = [UIColor redColor];
-    oneMoreDay.frame = CGRectMake(frame.size.width - 30, 0, frame.size.width, frame.size.height);
+    oneMoreDay.backgroundColor = [UIColor clearColor];
+    [oneMoreDay setImage:[UIImage imageNamed:@"add.png"] forState:UIControlStateNormal];
+    oneMoreDay.frame = CGRectMake(frame.size.width - 35, 0, 30, frame.size.height);
+    oneMoreDay.imageEdgeInsets = UIEdgeInsetsMake(3, 3, 3, 3);
     [self addSubview:oneMoreDay];
     [oneMoreDay addTarget:self action:@selector(oneMoreDayButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
 }
 
-- (void)createHotelChooseCard:(NSDictionary *)hotelInfo cardIndex:(NSInteger)index
+- (void)createHotelChooseCard:(HotelCardDataModel *)model cardIndex:(NSInteger)index
 {
-    HotelRoomCard *card = [[HotelRoomCard alloc] initWithFrame:CGRectMake(0, self.height, self.width , 40) andHotelInfo:hotelInfo];
+    HotelCard *card = [[HotelCard alloc] initWithFrame:CGRectMake(0, self.height, self.width , 0) andDataModel:model];
     card.delegate = self;
     card.index = index;
     
     [self.hotelCardArray addObject:card];
     
     [self addSubview:card];
-    self.height += 45;
+    self.height += card.frame.size.height + 5;
+    
+    if (index == 0)
+    {
+        card.selected = YES;
+    }
+    else
+    {
+        card.selected = NO;
+    }
 }
 
 - (void)CheckinDateButtonClicked:(id)sender
@@ -120,7 +135,7 @@
         {
             selfblock.checkinDateLabel.text = [NSString stringWithFormat:@"%@ %@ 入住",[model toString],[model getWeek]];
             selfblock.beginDate = model.date;
-            selfblock.endDate = [self dateSomeDays:selfblock.orderModel.durationDays LaterThan:selfblock.beginDate];
+            selfblock.endDate = [self dateSomeDays:selfblock.dataModel.durationDays LaterThan:selfblock.beginDate];
             [selfblock.delegate dateChangedOnCellIndex:selfblock.index];
             
             [((UIViewController*)selfblock.delegate).navigationController popViewControllerAnimated:YES];
@@ -133,10 +148,10 @@
 
 - (void)lessDayButtonClicked:(id)sender
 {
-    if (self.orderModel.durationDays >1)
+    if (self.dataModel.durationDays >1)
     {
-        self.orderModel.durationDays--;
-        self.daysCount.text = [NSString stringWithFormat:@"共 %ld 晚" , (long)self.orderModel.durationDays];
+        self.dataModel.durationDays--;
+        self.daysCount.text = [NSString stringWithFormat:@"共 %ld 晚" , (long)self.dataModel.durationDays];
         self.endDate = [self preDayFromDate:self.endDate];
         
         if (self.delegate)
@@ -148,8 +163,8 @@
 
 - (void)oneMoreDayButtonClicked:(id)sender
 {
-    self.orderModel.durationDays++;
-    self.daysCount.text = [NSString stringWithFormat:@"共 %ld 晚" , (long)self.orderModel.durationDays];
+    self.dataModel.durationDays++;
+    self.daysCount.text = [NSString stringWithFormat:@"共 %ld 晚" , (long)self.dataModel.durationDays];
     self.endDate = [self nextDayFromDate:self.endDate];
     
     if (self.delegate)
@@ -163,9 +178,9 @@
     if(_beginDate != beginDate)
     {
         _beginDate = beginDate;
-        self.orderModel.orderCheckinDate = [self stringFromDate:self.beginDate];
+        self.dataModel.orderCheckinDate = [self stringFromDate:self.beginDate];
         
-        self.checkinDateLabel.text = [NSString stringWithFormat:@"%@--%@" , self.orderModel.orderCheckinDate , [self stringFromDate:self.endDate]];
+        self.checkinDateLabel.text = [NSString stringWithFormat:@"%@--%@" , self.dataModel.orderCheckinDate , [self stringFromDate:self.endDate]];
     }
 }
 
@@ -174,21 +189,21 @@
     if (_endDate != endDate)
     {
         _endDate = endDate;
-        self.orderModel.orderEndDate = [self stringFromDate:self.endDate];
+        self.dataModel.orderEndDate = [self stringFromDate:self.endDate];
         
         self.checkinDateLabel.text = [NSString stringWithFormat:@"%@--%@" , [self stringFromDate:self.beginDate] , [self stringFromDate:self.endDate]];
     }
 }
 
-- (void)cardIsSelectedWithInfo:(NSDictionary *)cardInfo CardIndex:(NSInteger)index
+- (void)cardIsSelectedWithDataModel:(HotelCardDataModel *)cardModel CardIndex:(NSInteger)index
 {
-    self.orderModel.orderRoomInfo = cardInfo;
+    self.dataModel.orderHotelInfo = cardModel;
     
     for (NSInteger i = 0; i < self.hotelCardArray.count; i++)
     {
         if (i != index)
         {
-            [(HotelRoomCard *)[self.hotelCardArray objectAtIndex:i] setSelected:false];
+            [(HotelCard *)[self.hotelCardArray objectAtIndex:i] setSelected:false];
         }
     }
     
@@ -197,15 +212,15 @@
 
 - (void)roomsCountChanged
 {
-    for (NSInteger i=0; i < self.hotelCardArray.count; i++)
-    {
-        HotelRoomCard *card = [self.hotelCardArray objectAtIndex:i];
-        if (card.selected)
-        {
-            self.orderModel.orderRoomsCount = card.roomsCount;
-            self.orderModel.orderPrice = card.roomPrice;
-        }
-    }
+//    for (NSInteger i=0; i < self.hotelCardArray.count; i++)
+//    {
+//        HotelCard *card = [self.hotelCardArray objectAtIndex:i];
+//        if (card.selected)
+//        {
+////            self.dataModel.orderRoomsCount = card.roomsCount;
+//            self.dataModel.orderPrice = card.roomPrice;
+//        }
+//    }
     
     if (self.delegate)
     {

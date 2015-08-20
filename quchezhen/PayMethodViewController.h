@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "RoomOrdersDataModel.h"
 
-@interface PayMethodViewController : UITableViewController
+@interface PayMethodViewController : UIViewController<UITableViewDataSource , UITableViewDelegate>
+
+- (id)initWithDataModel:(RoomOrdersDataModel *)dataModel;
 
 @end

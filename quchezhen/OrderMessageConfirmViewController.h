@@ -7,10 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "RoomOrderCellModel.h"
+#import "RoomOrdersDataModel.h"
 
 @interface OrderMessageConfirmViewController : UIViewController<UITableViewDataSource , UITableViewDelegate>
 
-@property (strong , nonatomic) NSMutableArray *orderModelArray;
+- (id)initWithDataModel:(RoomOrdersDataModel *)model;
 
 @end

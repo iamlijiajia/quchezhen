@@ -7,6 +7,7 @@
 //
 
 #import "OwnerViewController.h"
+#import "AboutViewController.h"
 
 @interface OwnerViewController ()
 
@@ -25,7 +26,8 @@
 
 - (void)openMore:(id)sender
 {
-    
+    AboutViewController *aboutVC = [[AboutViewController alloc] init];
+    [self.navigationController pushViewController:aboutVC animated:YES];
 }
 
 - (void)didReceiveMemoryWarning {

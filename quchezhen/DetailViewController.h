@@ -7,13 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <BmobSDK/Bmob.h>
 
 @interface DetailViewController : UIViewController <UIScrollViewDelegate>
 
-- (id)initWithDictionary:(NSDictionary *)routeDic;
+//- (id)initWithDictionary:(NSDictionary *)routeDic;
 
-@property (strong, nonatomic) NSDictionary *detailrouteDic;
-
+//@property (strong , nonatomic) NSDictionary *detailrouteDic;
+@property (nonatomic , strong) BmobObject *routeObject;
 
 @end
 
