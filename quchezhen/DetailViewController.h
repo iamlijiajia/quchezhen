@@ -16,5 +16,7 @@
 //@property (strong , nonatomic) NSDictionary *detailrouteDic;
 @property (nonatomic , strong) BmobObject *routeObject;
 
+@property (nonatomic) BOOL fromOrderList;
+
 @end
 

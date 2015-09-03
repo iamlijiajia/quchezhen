@@ -21,6 +21,4 @@
 
 - (id)initWithDataModel:(RoomOrdersDataModel *)model;
 
-- (id)initWithDictionary:(NSDictionary *)dic;
-
 @end

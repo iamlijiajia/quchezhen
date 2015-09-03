@@ -8,6 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
-@interface OwnerViewController : UIViewController
+typedef NS_ENUM(NSInteger, SegmentType)
+{
+    likesRoute  =0,
+    orderList   =1
+};
+
+@interface OwnerViewController : UIViewController<UITableViewDataSource, UITableViewDelegate>
+
+@property (nonatomic) SegmentType segmentType;
 
 @end

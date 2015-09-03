@@ -8,8 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
+#import "ARSegmentControllerDelegate.h"
 
 @interface HomeViewController : UITableViewController
+
+@property (nonatomic , strong) NSString *titleForSegment;
 
 @end
 

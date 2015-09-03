@@ -15,7 +15,8 @@
 @property (nonatomic) DownLoadManager *manager;
 
 - (void) appendUIImageViewObserver:(UIImageView *)imageView;
+- (void)appendCompleteBlock:(void(^)(void))completeBlock progressBlock:(void(^)(void))progressBlock;
 
-- (void) loadImage:(NSString *)fileName;
+- (void)loadImage:(NSString *)fileName;
 
 @end

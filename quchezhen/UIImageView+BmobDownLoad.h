@@ -14,6 +14,8 @@
 
 - (id)initWithDefaultImageName:(NSString *)defaultImageName NewImageName:(NSString *)imageName andFrame:(CGRect)frame;
 
-- (void)resetWithDefaultImage:(UIImage *)defaultImage NewImageName:(NSString *)imageName andFrame:(CGRect)frame;
+- (void)resetWithDefaultImageName:(NSString *)defaultImageName NewImageName:(NSString *)imageName;
+- (void)resetWithDefaultImage:(UIImage *)defaultImage NewImageName:(NSString *)imageName;
 
+- (void)loadImageName:(NSString *)imageName withBlock:(void(^)(void))completeBlock;
 @end

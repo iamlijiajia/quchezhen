@@ -14,6 +14,8 @@
 @property (nonatomic) NSInteger index;
 @property (nonatomic) BOOL selected;
 @property (nonatomic , strong) NSString *hotelName;
+@property (nonatomic , strong) NSString *hotelTel;
+@property (nonatomic , strong) NSString *hotelLocation;
 @property (nonatomic , strong) NSMutableArray *roomCardDataArray;
 @property (nonatomic , readonly) NSInteger orderPrice;
 @property (nonatomic , readonly) NSInteger orderRoomsCount;

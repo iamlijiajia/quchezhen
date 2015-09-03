@@ -16,4 +16,6 @@
 - (id)initWithImages:(NSArray*)images Discriptions:(NSArray *)discriptions andFrame:(CGRect)frame;
 - (id)initWithImageNames:(NSArray*)imageNames Discriptions:(NSArray *)discriptions andFrame:(CGRect)frame;
 
+- (void)stretchOffset:(CGFloat)offset;
+
 @end

@@ -7,37 +7,26 @@
 //
 
 #import "RoomOrdersDataModel.h"
+#import "NSDate+Utilities.h"
 
 @interface RoomOrdersDataModel ()
 
 @property (nonatomic , strong) NSString *checkinDate;
+@property (nonatomic , strong)BmobObject *bmobRouteObject;
 
 @end
 
 @implementation RoomOrdersDataModel
 
-- (id)initWithDictionary:(NSDictionary *)dic
-{
-    self = [super init];
-    if (self)
-    {
-        self.CitiesCellViewModelArray = [NSMutableArray arrayWithCapacity:5];
-        NSArray *cities = [dic objectForKey:@"city_of_hotel_Info"];
-        for (NSInteger i = 0; i < cities.count; i++)
-        {
-            BookRoomViewCellDataModel *model = [[BookRoomViewCellDataModel alloc] initWithDictionary:[cities objectAtIndex:i]];
-            [self.CitiesCellViewModelArray addObject:model];
-        }
-    }
-    
-    return self;
-}
+
 
 - (id)initWithBmobObject:(BmobObject *)obj
 {
     self = [super init];
     if (self)
     {
+        self.bmobRouteObject = obj;
+        self.routeName = [obj objectForKey:@"name"];
         self.CitiesCellViewModelArray = [NSMutableArray arrayWithCapacity:5];
         NSArray *cities = [obj objectForKey:@"city_of_hotel_Info"];
         for (NSInteger i = 0; i < cities.count; i++)
@@ -98,7 +87,56 @@
         return model.orderCheckinDate;
     }
     
+    if (self.CitiesCellViewModelArray.count)
+    {
+        NSDate *checkinDate = nil;
+        for (BookRoomViewCellDataModel *model in self.CitiesCellViewModelArray)
+        {
+            if (!checkinDate)
+            {
+                checkinDate = [NSDate dateWithString:model.orderCheckinDate formate:@"yyyy-MM-dd"];
+            }
+            else
+            {
+                NSDate *tempDate = [NSDate dateWithString:model.orderCheckinDate formate:@"yyyy-MM-dd"];
+                if (checkinDate.timeIntervalSince1970 > tempDate.timeIntervalSince1970 )
+                {
+                    checkinDate = tempDate;
+                }
+            }
+        }
+        
+        return [checkinDate stringWithSeperator:@"-"];
+    }
+    
     return self.checkinDate;
+}
+
+- (NSString *)orderCheckoutDate
+{
+    if (self.CitiesCellViewModelArray.count)
+    {
+        NSDate *checkoutDate = nil;
+        for (BookRoomViewCellDataModel *model in self.CitiesCellViewModelArray)
+        {
+            if (!checkoutDate)
+            {
+                checkoutDate = [NSDate dateWithString:model.orderEndDate formate:@"yyyy-MM-dd"];
+            }
+            else
+            {
+                NSDate *tempDate = [NSDate dateWithString:model.orderEndDate formate:@"yyyy-MM-dd"];
+                if (checkoutDate.timeIntervalSince1970 < tempDate.timeIntervalSince1970 )
+                {
+                    checkoutDate = tempDate;
+                }
+            }
+        }
+
+        return [checkoutDate stringWithSeperator:@"-"];
+    }
+    
+    return nil;
 }
 
 - (NSInteger)orderRoomsCount
@@ -107,10 +145,27 @@
     
     for (BookRoomViewCellDataModel *model in self.CitiesCellViewModelArray)
     {
-        roomCount += model.orderRoomsCount;
+        if(roomCount < model.orderRoomsCount)
+        {
+            roomCount = model.orderRoomsCount;
+        }
     }
     
     return roomCount;
+}
+
+- (NSArray *)cellWithOrderHotelsArray
+{
+    NSMutableArray *array = [[NSMutableArray alloc] init];
+    for (BookRoomViewCellDataModel *model in self.CitiesCellViewModelArray)
+    {
+        if (model.orderHotelInfo)
+        {
+            [array addObject:model];
+        }
+    }
+    
+    return array;
 }
 
 @end

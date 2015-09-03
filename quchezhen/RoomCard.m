@@ -14,6 +14,7 @@
 @property (strong , nonatomic) NSDictionary *cardInfo;
 @property (strong , nonatomic) UIButton *LessRoom;
 @property (strong , nonatomic) UIButton *oneMoreRoom;
+@property (strong , nonatomic) UIImageView *bgView;
 
 @end
 
@@ -35,27 +36,28 @@
 {
     CGFloat width = frame.size.width;
     
-    UIImage *backgroundImg = [UIImage imageNamed:@"toolbar_background.png"];
-    UIImageView *bgView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, width, frame.size.height)];
-    bgView.image = backgroundImg;
-    [self addSubview:bgView];
+    UIImage *backgroundImg = [UIImage imageNamed:@"start-travl-bg-room-selected@3x.png"];
+    self.bgView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, width, frame.size.height)];
+    self.bgView.image = backgroundImg;
+    [self addSubview:self.bgView];
     
-    UILabel *roomType = [[UILabel alloc] initWithFrame:CGRectMake(20, 8 , 100, 20)];
+    UILabel *roomType = [[UILabel alloc] initWithFrame:CGRectMake(13, 11 , 100, 20)];
     roomType.backgroundColor = [UIColor clearColor];
     roomType.font = [UIFont systemFontOfSize:14];
+    roomType.textColor = [UIColor colorWithRed:51.0/255.0 green:51.0/255.0 blue:51.0/255.0 alpha:1];
     roomType.text = roomData.roomType;
     [self addSubview:roomType];
     
-    UILabel *price = [[UILabel alloc] initWithFrame:CGRectMake(140, 8 , 50 , 20)];
-    price.backgroundColor = [UIColor clearColor];
-    price.textColor = [UIColor redColor];
-    price.font = [UIFont systemFontOfSize:14];
+    UILabel *price = [[UILabel alloc] initWithFrame:CGRectMake(115, 11 , 80 , 20)];
+    price.textColor = [UIColor colorWithRed:255.0/255.0 green:94.0/255.0 blue:94.0/255.0 alpha:1];
+    price.font = [UIFont systemFontOfSize:18];
     price.text = [NSString stringWithFormat:@"￥%ld" , (long)roomData.roomPrice];
     [self addSubview:price];
     
-    UILabel *roomIntro = [[UILabel alloc] initWithFrame:CGRectMake(20, 30 , width - 120, 15)];
+    UILabel *roomIntro = [[UILabel alloc] initWithFrame:CGRectMake(13, 33 , width - 13, 15)];
     roomIntro.backgroundColor = [UIColor clearColor];
     roomIntro.font = [UIFont systemFontOfSize:10];
+    roomIntro.textColor = [UIColor colorWithRed:187.0/255.0 green:187.0/255.0 blue:187.0/255.0 alpha:1];
     roomIntro.text = roomData.roomIntro;
     [self addSubview:roomIntro];
     
@@ -113,6 +115,20 @@
     self.LessRoom.hidden = hidden;
     self.roomsCountLabel.hidden = hidden;
     self.oneMoreRoom.hidden = hidden;
+}
+
+- (void)setIsSelected:(BOOL)isSelected
+{
+    if (isSelected)
+    {
+        UIImage *backgroundImg = [UIImage imageNamed:@"start-travl-bg-room-selected@3x.png"];
+        self.bgView.image = backgroundImg;
+    }
+    else
+    {
+        UIImage *backgroundImg = [UIImage imageNamed:@"start-travl-bg-room-default@3x.png"];
+        self.bgView.image = backgroundImg;
+    }
 }
 
 @end

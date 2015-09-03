@@ -17,32 +17,39 @@
 #import "WBLikeButton.h"
 #import "UIAlertView+Blocks.h"
 #import "LoginViewController.h"
-
+#import "UIView+Utilities.h"
+#import "UIImageView+AFNetworking.h"
 #import "RoomOrdersDataModel.h"
+#import "config.h"
+#import "OrderMessageConfirmViewController.h"
 
-
-@interface DetailViewController ()
+@interface DetailViewController ()<UIScrollViewDelegate>
 {
     UIScrollView * tUIScrollView;
     IntroPhotoView *introsView;
     WBLikeButton *likeButton;
     BOOL toLoginAfterLikeButtonPressed;
+    CGRect initialintroFrame;
+    NSInteger defaultintroViewHeight;
 }
+
+@property (nonatomic , strong) UIImageView *detailRoute;
 
 @end
 
 @implementation DetailViewController
 
-//- (id)initWithDictionary:(NSDictionary *)routeDic
-//{
-//    self = [super init];
-//    if (self)
-//    {
-//        _detailrouteDic = routeDic;
-//    }
-//    
-//    return self;
-//}
+- (id)init
+{
+    self = [super init];
+    if (self)
+    {
+        self.fromOrderList = NO;
+        toLoginAfterLikeButtonPressed = NO;
+    }
+    
+    return self;
+}
 
 - (void)viewDidLoad
 {
@@ -50,14 +57,11 @@
     
     self.view.backgroundColor = [UIColor whiteColor];
     
-    toLoginAfterLikeButtonPressed = NO;
-//    self.title = [_detailrouteDic objectForKey:@"name"];
-
-    UIBarButtonItem *left = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"prev.png"] style:UIBarButtonItemStyleDone target:self action:@selector(onBackBarButtonPressed:)];
-    self.navigationItem.leftBarButtonItem = left;
+    UIImageView *bg = [[UIImageView alloc] initWithFrame:self.view.frame];
+    [self.view addSubview:bg];
     
     float width = self.view.frame.size.width;
-    float height = 220;
+    float height = 180;
     
     NSArray *introImagesArray = [self.routeObject objectForKey:@"introImages"];
     NSMutableArray *images = [[NSMutableArray alloc] init];
@@ -68,69 +72,123 @@
         [discriptions addObject:[dic objectForKey:@"discription"]];
     }
     introsView = [[IntroPhotoView alloc] initWithImageNames:images Discriptions:discriptions andFrame:CGRectMake(0, 0, width, height)];
-    introsView.backgroundColor = [UIColor whiteColor];
-    
-    
+//    introsView.backgroundColor = [UIColor redColor];
     
     UIScrollView *detailRouteScrollView = [[UIScrollView alloc] init];
+    detailRouteScrollView.delegate = self;
     detailRouteScrollView.backgroundColor = [UIColor clearColor];
     detailRouteScrollView.pagingEnabled = NO;
     detailRouteScrollView.clipsToBounds = YES;
     detailRouteScrollView.showsVerticalScrollIndicator = NO;
     detailRouteScrollView.showsHorizontalScrollIndicator = YES;
-    
-    detailRouteScrollView.frame = CGRectMake(0, -64, width, self.view.frame.size.height + 64);
-//    detailRouteScrollView.contentSize = CGSizeMake(width,imageVH + height*2 + 2);
-    
-//    [detailRouteScrollView addSubview:detailRoute];
+    detailRouteScrollView.frame = CGRectMake(0, 0, width, self.view.frame.size.height);
     [self.view addSubview:detailRouteScrollView];
     
     [detailRouteScrollView addSubview:introsView];
     
     
+    self.detailRoute = [[UIImageView alloc] initWithFrame:CGRectMake(0, height+6, width, self.view.height)];
+    self.detailRoute.contentMode = UIViewContentModeScaleToFill;
+    detailRouteScrollView.contentSize = CGSizeMake(width,self.view.height +180);
+    [detailRouteScrollView addSubview:self.detailRoute];
+    [detailRouteScrollView bringSubviewToFront:introsView];
+    
+    __block DetailViewController *blockSelf = self;
     NSString *routeImageName = [self.routeObject objectForKey:@"routeImage"];
-    [BmobProFile downloadFileWithFilename:routeImageName block:^(BOOL isSuccessful, NSError *error, NSString *filepath) {
-        UIImage *routeImage = [UIImage imageNamed:filepath];
-        NSInteger routeImageH = routeImage.size.height;
-        NSInteger routeImageW = routeImage.size.width;
+    NSURLRequest *request = [NSURLRequest requestWithURL:URL(routeImageName)];
+    [self.detailRoute setImageWithURLRequest:request placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+        NSInteger routeImageH = image.size.height;
+        NSInteger routeImageW = image.size.width;
         NSInteger imageVH = routeImageH * width/routeImageW;
-        UIImageView *detailRoute = [[UIImageView alloc] initWithFrame:CGRectMake(0, height+2, width, imageVH + height+2)];
-        detailRoute.contentMode = UIViewContentModeScaleToFill;
-        detailRoute.image = routeImage;
+        blockSelf.detailRoute.frame = CGRectMake(0, height+6, width, imageVH + height+6);
+        detailRouteScrollView.contentSize = CGSizeMake(width,imageVH + height*2 + 60);
         
-        detailRouteScrollView.contentSize = CGSizeMake(width,imageVH + height*2 + 2);
-        [detailRouteScrollView addSubview:detailRoute];
-    } progress:^(CGFloat progress) {
+    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
         
     }];
     
     
-    
-    
+//    [BmobProFile downloadFileWithFilename:routeImageName block:^(BOOL isSuccessful, NSError *error, NSString *filepath) {
+//        UIImage *routeImage = [UIImage imageWithContentsOfFile:filepath];
+//        NSInteger routeImageH = routeImage.size.height;
+//        NSInteger routeImageW = routeImage.size.width;
+//        NSInteger imageVH = routeImageH * width/routeImageW;
+//        UIImageView *detailRoute = [[UIImageView alloc] initWithFrame:CGRectMake(0, height+6, width, imageVH + height+6)];
+//        detailRoute.contentMode = UIViewContentModeScaleToFill;
+//        detailRoute.image = routeImage;
+//        
+//        detailRouteScrollView.contentSize = CGSizeMake(width,imageVH + height*2 + 60);
+//        [detailRouteScrollView addSubview:detailRoute];
+//        [detailRouteScrollView bringSubviewToFront:introsView];
+//    } progress:^(CGFloat progress) {
+//        
+//    }];
     
     UIButton *beginRoute = [UIButton buttonWithType:UIButtonTypeCustom];
-    [beginRoute setTitle:@"开始行程" forState:UIControlStateNormal];
-    [beginRoute setTitleColor:[UIColor blackColor] forState:UIControlStateHighlighted];
-    beginRoute.backgroundColor = [UIColor redColor];
-    beginRoute.frame = CGRectMake(self.view.frame.size.width/2 - 50, self.view.frame.size.height - 60, 100, 40);
-    [beginRoute addTarget:self action:@selector(beginRouteButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    [beginRoute setBackgroundImage:[UIImage imageNamed:@"foot-btn-start-travl-default@3x.png"] forState:UIControlStateNormal];
+    [beginRoute setTitleColor:[UIColor colorWithRed:241.0/255.0 green:241.0/255.0 blue:241.0/255.0 alpha:1] forState:UIControlStateNormal];
+    beginRoute.frame = CGRectMake(0, self.view.frame.size.height - 45, self.view.width, 45);
+    beginRoute.titleLabel.font = [UIFont boldSystemFontOfSize:20];
     [self.view addSubview:beginRoute];
     
+    if (self.fromOrderList)
+    {
+        [beginRoute setTitle:@"查看住宿信息" forState:UIControlStateNormal];
+        [beginRoute addTarget:self action:@selector(checkOrderHotelsList:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    else
+    {
+        [beginRoute setTitle:@"立即预定" forState:UIControlStateNormal];
+        [beginRoute addTarget:self action:@selector(beginRouteButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    }
     
-    likeButton = [[WBLikeButton alloc] initWithFrame:CGRectMake(240, 10, 40, 40)];
-    likeButton.likeState = WBLikeStateUnLike;
-    [likeButton setLikeStateImage:[UIImage imageNamed:@"love_heart_highlighted.png"] andUnLikeStateImage:[UIImage imageNamed:@"love_heart.png"]];
+    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
+    [backButton setImage:[UIImage imageNamed:@"topbar-btn-back-white@3x.png"] forState:UIControlStateNormal];
+    [backButton addTarget:self action:@selector(onBackBarButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    
+    likeButton = [[WBLikeButton alloc] initWithFrame:CGRectMake(0, 0, 42, 30)];
+    [likeButton setLikeStateImage:[UIImage imageNamed:@"topbar-btn-collection-selected@3x.png"] andUnLikeStateImage:[UIImage imageNamed:@"topbar-btn-collection-default@3x.png"]];
+    likeButton.hidden = YES;
     [likeButton addTarget:self action:@selector(onLikeButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
 
-    UIButton *share = [[UIButton alloc] initWithFrame:CGRectMake(290, 10, 40, 40)];
-    [share setImage:[UIImage imageNamed:@"share.png"] forState:UIControlStateNormal];
-//
-    UIImageView *rightbg = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 64)];
-    [rightbg addSubview:share];
-    [rightbg addSubview:likeButton];
+    [self initLikeButtonState];
+
+    UIBarButtonItem *leftButton = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+    self.navigationItem.leftBarButtonItem = leftButton;
     
-    UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithCustomView:rightbg];
+    UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithCustomView:likeButton];
     self.navigationItem.rightBarButtonItem = rightButton;
+}
+
+- (void)initLikeButtonState
+{
+    if ([BmobUser getCurrentUser])
+    {
+        BmobQuery *query = [BmobQuery queryWithClassName:@"_User"];
+        [query whereKey:@"objectId" equalTo:[BmobUser getCurrentUser].objectId];
+        [query whereKey:@"likes" equalTo:self.routeObject];
+        
+        [query countObjectsInBackgroundWithBlock:^(int number, NSError *error) {
+            if (error)
+            {
+                
+            }
+            else if (number)
+            {
+                likeButton.hidden = NO;
+                likeButton.likeState = WBLikeStateLike;
+            }
+            else
+            {
+                likeButton.hidden = NO;
+                likeButton.likeState = WBLikeStateUnLike;
+            }
+        }];
+    }
+    else
+    {
+        likeButton.likeState = WBLikeStateUnLike;
+    }
 }
 
 - (void)onBackBarButtonPressed:(id)sender
@@ -196,8 +254,7 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"bg_clear.png"] forBarMetrics:UIBarMetricsDefault];
-    self.navigationController.navigationBar.shadowImage = [UIImage imageNamed:@"bg_clear.png"];
+    [self showNavigationBar:NO WithAnimate:NO];
 }
 
 - (void) viewDidAppear:(BOOL)animated
@@ -215,8 +272,49 @@
 
 - (void)viewWillDisappear:(BOOL)animated
 {
-    [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
-    self.navigationController.navigationBar.shadowImage = nil;
+    [self showNavigationBar:YES WithAnimate:NO];
+}
+
+- (void)showNavigationBar:(BOOL)show WithAnimate:(BOOL)animate
+{
+    if (show)
+    {
+        if (animate)
+        {
+            [UIView animateWithDuration:0.2 delay:0.f options:UIViewAnimationOptionTransitionFlipFromTop animations:^{
+                [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
+                self.navigationController.navigationBar.shadowImage = nil;
+            } completion:nil];
+        }
+        else
+        {
+            [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
+            self.navigationController.navigationBar.shadowImage = nil;
+        }
+    }
+    else
+    {
+        if (animate)
+        {
+            [UIView animateWithDuration:0.2 delay:0.f options:UIViewAnimationOptionTransitionFlipFromTop animations:^{
+                [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"bg_clear.png"] forBarMetrics:UIBarMetricsDefault];
+                self.navigationController.navigationBar.shadowImage = [UIImage imageNamed:@"bg_clear.png"];
+            } completion:nil];
+        }
+        else
+        {
+            [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"bg_clear.png"] forBarMetrics:UIBarMetricsDefault];
+            self.navigationController.navigationBar.shadowImage = [UIImage imageNamed:@"bg_clear.png"];
+        }
+    }
+    
+    
+}
+
+- (void)checkOrderHotelsList:(id)sender
+{
+    OrderMessageConfirmViewController *VC = [[OrderMessageConfirmViewController alloc] initToCheckOrderListWithRouteObject:self.routeObject];
+    [self.navigationController pushViewController:VC animated:YES];
 }
 
 - (void)beginRouteButtonClicked:(id)sender
@@ -244,7 +342,7 @@
 //            [but setTitle:[NSString stringWithFormat:@"%@ %@",[model toString],[model getWeek]] forState:UIControlStateNormal];
 //        }
         
-        [selfblock.navigationController popViewControllerAnimated:YES];
+        [selfblock.navigationController popViewControllerAnimated:NO];
         [selfblock toBookRoomsView:[model toString] Date:[model date]];
     };
     
@@ -265,6 +363,30 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+
+- (void)scrollViewDidScroll:(UIScrollView*)scrollView
+{
+    CGFloat offset = scrollView.contentOffset.y;
+    
+    
+    if (offset > 0)
+    {
+        if (offset + 64 >= introsView.height)
+        {
+            introsView.top = offset - (introsView.height - 64);
+        }
+        else if (offset + 64 <= introsView.height)
+        {
+            introsView.top = 0;
+            [introsView stretchOffset:offset];
+        }
+    }
+    else
+    {
+        [introsView stretchOffset:offset];
+    }
 }
 
 

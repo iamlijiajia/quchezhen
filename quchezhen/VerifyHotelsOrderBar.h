@@ -20,5 +20,6 @@
 @property (nonatomic) NSInteger daysCount;
 @property (strong , nonatomic) NSString *checkinDate;
 @property (strong , nonatomic) id<VerifyHotelsOrderBarDelegate> delegate;
+@property (strong , nonatomic) UIImage *verifyButtonImage;
 
 @end

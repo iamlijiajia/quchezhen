@@ -21,6 +21,8 @@
 @property (nonatomic , strong) RoomCardDataModel *dataModel;
 @property (nonatomic , strong) id<RoomsCountDelegate> delegate;
 
+@property (nonatomic) BOOL isSelected;
+
 - (id)initWithRoomCardDataModel:(RoomCardDataModel *)roomData Frame:(CGRect)frame;
 - (void)createRoomCardWithDataModel:(RoomCardDataModel *)roomData Frame:(CGRect)frame;
 

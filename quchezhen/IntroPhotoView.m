@@ -9,13 +9,25 @@
 #import "IntroPhotoView.h"
 #import <BmobSDK/BmobProFile.h>
 #import "UIImageView+BmobDownLoad.h"
+#import "UIView+Utilities.h"
+#import "UIImage+Blur.h"
+#import "UIImageView+AFNetworking.h"
+#import "config.h"
+
+#define KTag_Base       1000
 
 @interface IntroPhotoView ()<UIScrollViewDelegate>{
     UIScrollView *_scrollview;
     UIPageControl *_pgcontrol;
     NSMutableArray *_images;
-//    UIImageView*_backgroundimageview;
+    NSArray *textArray;
+    CGRect initFrame;
+    
+    UIImageView *stretchImageView;
+    UILabel *stretchLabel;
 }
+
+@property (nonatomic, strong) NSMutableArray *blurImages;
 
 @end
 @implementation IntroPhotoView
@@ -25,6 +37,8 @@
     self = [super initWithFrame:frame];
     if (self)
     {
+        initFrame = frame;
+        
         _scrollview = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
         _scrollview.pagingEnabled = YES;
         _scrollview.delegate = self;
@@ -45,6 +59,8 @@
         _pgcontrol.center = pgconcenter_;
         [_pgcontrol sizeToFit];
         [self addSubview:_pgcontrol];
+        
+        self.blurImages = [[NSMutableArray alloc] init];
     }
     
     return self;
@@ -83,7 +99,13 @@
         NSMutableArray *array = [[NSMutableArray alloc] init];
         for (NSString *name in imageNames)
         {
-            UIImageView *imageView = [[UIImageView alloc] initWithDefaultImageName:@"default_intro.png" NewImageName:name andFrame:frame];
+            UIImageView *imageView = [[UIImageView alloc] init];
+            [imageView setImageWithURLRequest:[NSURLRequest requestWithURL:URL(name)] placeholderImage:[UIImage imageNamed:@"banner-default@3x.png"] success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+                [self.blurImages addObject:[self prepareForBlurImagesWithImage:image]];
+            } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+                
+            }];
+
             [array addObject:imageView];
         }
         
@@ -97,6 +119,26 @@
     int page_ = (int)round(scrollView.contentOffset.x / scrollView.frame.size.width);
     _pgcontrol.currentPage = page_;
 }
+
+- (NSMutableArray *)prepareForBlurImagesWithImage:(UIImage *)image
+{
+    if (!image)
+    {
+        return nil;
+    }
+    
+    NSMutableArray *array = [[NSMutableArray alloc] init];
+    
+    CGFloat factor = 0.1;
+    [array addObject:image];
+    for (NSUInteger i = 0; i < (self.height - 64)/20; i++) {
+        [array addObject:[image boxblurImageWithBlur:factor]];
+        factor+=0.08;
+    }
+    
+    return array;
+}
+
 
 - (void)setupWithImages:(NSArray*)images Discriptions:(NSArray *)discriptions andFrame:(CGRect)frame
 {
@@ -124,10 +166,18 @@
         return;
     }
     
-    UIImageView *bgImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
-    [self addSubview:bgImageView];
+    stretchImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
+    stretchImageView.contentMode = UIViewContentModeScaleAspectFill;
+    [self addSubview:stretchImageView];
+    
+    stretchLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, stretchImageView.frame.size.height - 60, stretchImageView.frame.size.width - 10*2, 50)];
+    stretchLabel.font = [UIFont systemFontOfSize:14];
+    stretchLabel.textColor = [UIColor whiteColor];
+    stretchLabel.numberOfLines = 2;
+    [stretchImageView addSubview:stretchLabel];
     
     _images = [NSMutableArray arrayWithArray:imageViews];
+    textArray = discriptions;
     
     _scrollview.contentSize = CGSizeMake(frame.size.width * _images.count , frame.size.height);
     
@@ -139,8 +189,9 @@
                                     _scrollview.bounds.size.height);
         UIImageView*iv_ = [_images objectAtIndex:i];
         iv_.frame = ivrect_;
-        iv_.contentMode = UIViewContentModeScaleAspectFill;
-        iv_.clipsToBounds = YES;
+        iv_.contentMode = UIViewContentModeScaleToFill;
+        iv_.clipsToBounds = NO;
+        iv_.tag = i + KTag_Base;
         
         if (i < discriptions.count)
         {
@@ -149,6 +200,7 @@
             textLabel.text = text;
             textLabel.font = [UIFont systemFontOfSize:14];
             textLabel.textColor = [UIColor whiteColor];
+            textLabel.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
             textLabel.numberOfLines = 2;
             textLabel.frame = CGRectMake(10, ivrect_.size.height - 60, ivrect_.size.width - 10*2, 50);
             
@@ -159,6 +211,58 @@
     }
     
     _pgcontrol.numberOfPages = _images.count;
+}
+
+- (void)stretchOffset:(CGFloat)offset
+{
+    UIImageView *currentView = (UIImageView *)[_scrollview viewWithTag:(_pgcontrol.currentPage + KTag_Base)];
+    if (currentView)
+    {
+        if (offset > 0)
+        {
+            NSMutableArray *blurImagesArray;
+            
+            for (blurImagesArray in self.blurImages)
+            {
+                if (blurImagesArray && blurImagesArray.count && [blurImagesArray objectAtIndex:0] == currentView.image)
+                {
+                    break;
+                }
+            }
+            
+            if (blurImagesArray && blurImagesArray.count)
+            {
+                NSInteger index = offset / 10;
+                if (index < 0)
+                {
+                    index = 0;
+                }
+                else if(index >= blurImagesArray.count)
+                {
+                    index = blurImagesArray.count - 1;
+                }
+                UIImage *image = blurImagesArray[index];
+                
+                stretchImageView.image = image;
+                stretchLabel.text = [textArray objectAtIndex:_pgcontrol.currentPage];
+                stretchImageView.frame= CGRectMake( 0,0, self.frame.size.width, self.frame.size.height);
+                stretchLabel.frame = CGRectZero;//CGRectMake(10, stretchImageView.frame.size.height - 60, stretchImageView.frame.size.width - 10*2, 50);
+            }
+        }
+        else if(offset < 0)
+        {
+            UIImage *image = currentView.image;
+            stretchImageView.image = image;
+            stretchLabel.text = [textArray objectAtIndex:_pgcontrol.currentPage];
+            stretchImageView.frame= CGRectMake( offset,offset, self.frame.size.width + (-offset)*2, self.frame.size.height + (-offset));
+            stretchLabel.frame = CGRectMake(10 + (-offset), stretchImageView.frame.size.height - 60, 320 - 10*2, 50);
+        }
+        else
+        {
+            stretchImageView.image = nil;
+            stretchLabel.text = nil;
+        }
+    }
 }
 /*
 // Only override drawRect: if you perform custom drawing.

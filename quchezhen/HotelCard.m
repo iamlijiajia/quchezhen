@@ -11,6 +11,7 @@
 @interface HotelCard ()
 
 @property (strong , nonatomic) NSDictionary *cardInfo;
+@property (strong , nonatomic) UIImageView *hotelCardNameBg;
 
 @end
 
@@ -26,9 +27,9 @@
         
         CGFloat width = frame.size.width;
         
-        UIImageView *hotelCardBg = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0 , width, 30)];
-        hotelCardBg.image = [UIImage imageNamed:@"navigationbar_background.png"];
-        [self addSubview:hotelCardBg];
+        self.hotelCardNameBg = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0 , width, 30)];
+        self.hotelCardNameBg.image = [UIImage imageNamed:@"start-travl-bg-hotel-selected@3x.png"];
+        [self addSubview:self.hotelCardNameBg];
 
         UILabel *hotelName = [[UILabel alloc] initWithFrame:CGRectMake(0, 0 , width, 30)];
         self.height += 30;
@@ -36,6 +37,7 @@
         hotelName.textAlignment = NSTextAlignmentCenter;
         hotelName.backgroundColor = [UIColor clearColor];
         hotelName.font = [UIFont systemFontOfSize:18];
+        hotelName.textColor = [UIColor colorWithRed:51.0/255.0 green:51.0/255.0 blue:51.0/255.0 alpha:1];
         hotelName.text = dataModel.hotelName;
         [self addSubview:hotelName];
 
@@ -54,10 +56,9 @@
 {
     for (RoomCardDataModel *model in self.dataModel.roomCardDataArray)
     {
-        CGRect roomCardFrame = CGRectMake(0, self.height, self.frame.size.width, 50);
-        self.height += 50;
-        
+        CGRect roomCardFrame = CGRectMake(0, self.height, self.frame.size.width, 52);
         RoomCard *card = [[RoomCard alloc] initWithRoomCardDataModel:model Frame:roomCardFrame];
+        self.height += 52;
         card.delegate = self;
         [self addSubview:card];
     }
@@ -88,13 +89,29 @@
     
     if (_selected)
     {
-        self.backgroundColor = [UIColor lightGrayColor];
-        [self setAllRoomCardsRoomCountHidden:NO];
+        self.hotelCardNameBg.image = [UIImage imageNamed:@"start-travl-bg-hotel-selected@3x.png"];
+        
+        for (UIView *subView in [self subviews])
+        {
+            if ([subView isKindOfClass:[RoomCard class]])
+            {
+                [(RoomCard *)subView setIsSelected:YES];
+                [(RoomCard *)subView setRoomsCountLabelHidden:NO];
+            }
+        }
     }
     else
     {
-        self.backgroundColor = [UIColor clearColor];
-        [self setAllRoomCardsRoomCountHidden:YES];
+        self.hotelCardNameBg.image = [UIImage imageNamed:@"start-travl-bg-hotel-default@3x.png"];
+        
+        for (UIView *subView in [self subviews])
+        {
+            if ([subView isKindOfClass:[RoomCard class]])
+            {
+                [(RoomCard *)subView setIsSelected:NO];
+                [(RoomCard *)subView setRoomsCountLabelHidden:YES];
+            }
+        }
     }
 }
 

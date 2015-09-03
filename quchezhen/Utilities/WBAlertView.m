@@ -52,6 +52,20 @@
     [alert release];
 }
 
+- (id)initWithTitle:(NSString *)title message:(NSString *)message delegate:(id)delegate cancelButtonTitle:(NSString *)cancelButtonTitle otherButtonTitles:(NSString *)otherButtonTitles, ...
+{
+    self = [super initWithTitle:title message:message delegate:delegate cancelButtonTitle:cancelButtonTitle otherButtonTitles:otherButtonTitles, nil];
+    if (self)
+    {
+        if (!delegate)
+        {
+            self.delegate = self;
+        }
+    }
+    
+    return self;
+}
+
 #pragma mark - Delegate
 
 - (void)setDelegate:(id <UIAlertViewDelegate>)delegate
@@ -69,7 +83,7 @@
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if (realDelegate && [realDelegate respondsToSelector:@selector(alertView:clickedButtonAtIndex:)])
+    if (realDelegate && realDelegate != [super delegate] && [realDelegate respondsToSelector:@selector(alertView:clickedButtonAtIndex:)])
     {
         [realDelegate alertView:self clickedButtonAtIndex:buttonIndex];
     }
@@ -82,7 +96,7 @@
 
 - (void)alertViewCancel:(UIAlertView *)alertView
 {
-    if (realDelegate && [realDelegate respondsToSelector:@selector(alertViewCancel:)])
+    if (realDelegate && realDelegate != [super delegate] && [realDelegate respondsToSelector:@selector(alertViewCancel:)])
     {
         [realDelegate alertViewCancel:self];
     }
@@ -95,7 +109,7 @@
 
 - (void)willPresentAlertView:(UIAlertView *)alertView
 {
-    if (realDelegate && [realDelegate respondsToSelector:@selector(willPresentAlertView:)])
+    if (realDelegate && realDelegate != [super delegate] && [realDelegate respondsToSelector:@selector(willPresentAlertView:)])
     {
         [realDelegate willPresentAlertView:self];
     }
@@ -108,7 +122,7 @@
 
 - (void)didPresentAlertView:(UIAlertView *)alertView
 {
-    if (realDelegate && [realDelegate respondsToSelector:@selector(didPresentAlertView:)])
+    if (realDelegate && realDelegate != [super delegate] && [realDelegate respondsToSelector:@selector(didPresentAlertView:)])
     {
         [realDelegate didPresentAlertView:self];
     }
@@ -121,7 +135,7 @@
 
 - (void)alertView:(UIAlertView *)alertView willDismissWithButtonIndex:(NSInteger)buttonIndex
 {
-    if (realDelegate && [realDelegate respondsToSelector:@selector(alertView:willDismissWithButtonIndex:)])
+    if (realDelegate && realDelegate != [super delegate] && [realDelegate respondsToSelector:@selector(alertView:willDismissWithButtonIndex:)])
     {
         [realDelegate alertView:self willDismissWithButtonIndex:buttonIndex];
     }
@@ -134,7 +148,7 @@
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
-    if (realDelegate && [realDelegate respondsToSelector:@selector(alertView:didDismissWithButtonIndex:)])
+    if (realDelegate && realDelegate != [super delegate] && [realDelegate respondsToSelector:@selector(alertView:didDismissWithButtonIndex:)])
     {
         [realDelegate alertView:self didDismissWithButtonIndex:buttonIndex];
     }

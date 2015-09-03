@@ -17,6 +17,8 @@
     {
         self.selected = NO;
         self.hotelName = [dic objectForKey:@"hotelName"];
+        self.hotelTel = [dic objectForKey:@"hotelTel"];
+        self.hotelLocation = [dic objectForKey:@"hotelLocation"];
         NSArray *rooms = [dic objectForKey:@"rooms"];
         self.roomCardDataArray = [NSMutableArray arrayWithCapacity:5];
         

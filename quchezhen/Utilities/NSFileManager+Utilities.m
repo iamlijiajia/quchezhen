@@ -161,12 +161,12 @@ long getDiskFreeSize()
 
 + (NSString *) pathForItemNamed: (NSString *) fname inFolder: (NSString *) path
 {
-    NSString *itemPath = [path stringByAppendingPathComponent:fname];
-    if (![FILEMANAGER fileExistsAtPath:itemPath])
-    {
-        return nil;
-    }
-    return itemPath;
+//    NSString *itemPath = [path stringByAppendingPathComponent:fname];
+//    if (![FILEMANAGER fileExistsAtPath:itemPath])
+//    {
+//        return nil;
+//    }
+//    return itemPath;
     
     
 	NSString *file = nil;

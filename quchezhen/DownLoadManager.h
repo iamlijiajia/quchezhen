@@ -15,7 +15,7 @@
 
 + (DownLoadManager *) shareInstance;
 
-- (void) loadImage:(NSString *)fileName forUIImageView:(UIImageView *)imageView;
+- (void) loadImage:(NSString *)fileName forUIImageView:(UIImageView *)imageView withBlock:(void(^)(void))completeBlock;
 
 - (void)loadFinished:(DownLoadItem *)item;
 

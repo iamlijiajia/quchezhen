@@ -9,6 +9,8 @@
 #import "BookRoomViewController.h"
 #import "VerifyHotelsOrderBar.h"
 #import "OrderMessageConfirmViewController.h"
+#import "UIAlertView+Blocks.h"
+#import "LoginViewController.h"
 
 @interface BookRoomViewController ()<VerifyHotelsOrderBarDelegate>
 
@@ -22,19 +24,6 @@
 @end
 
 @implementation BookRoomViewController
-
-- (id)initWithDictionary:(NSDictionary *)dic
-{
-    self = [super init];
-    
-    if (self)
-    {
-        self.dataModel = [[RoomOrdersDataModel alloc] initWithDictionary:dic];
-        self.cellArray = [NSMutableArray arrayWithCapacity:5];
-    }
-    
-    return self;
-}
 
 - (id)initWithDataModel:(RoomOrdersDataModel *)model
 {
@@ -51,11 +40,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.view.backgroundColor = [UIColor whiteColor];
+    
     CGRect frame = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.x, self.view.frame.size.width, self.view.frame.size.height - 45);
     self.tableView = [[UITableView alloc] initWithFrame:frame style:UITableViewStyleGrouped];
     self.tableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 5, 5)]; //更改header高度
-    self.tableView.sectionHeaderHeight = 2;
-    self.tableView.sectionFooterHeight = 5;
+    self.tableView.sectionHeaderHeight = 5;
+    self.tableView.sectionFooterHeight = 2;
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     
@@ -71,6 +62,7 @@
         BookRoomViewCell *cell = [[BookRoomViewCell alloc] initWithDataModel:model Date:[self.beginDate dateByAddingTimeInterval:oneDay*index] andFrameWith:self.tableView.frame.size.width];
         cell.delegate = self;
         cell.index = index;
+        index++;
         
         [self.cellArray addObject:cell];
     }
@@ -131,7 +123,7 @@
         NSInteger oneDay = 60*60*24;
         
         cellNext.beginDate = cell.endDate;
-        cellNext.endDate = [cellNext.endDate dateByAddingTimeInterval:oneDay * cellNext.dataModel.durationDays];
+        cellNext.endDate = [cellNext.beginDate dateByAddingTimeInterval:oneDay * cellNext.dataModel.durationDays];
     }
     
     [self orderChanged];
@@ -146,8 +138,32 @@
 
 - (void)onVerifyOrderButtonPressed
 {
-    OrderMessageConfirmViewController *viewController = [[OrderMessageConfirmViewController alloc] initWithDataModel:self.dataModel];
-    [self.navigationController pushViewController:viewController animated:YES];
+    BmobUser *currentUser = [BmobUser getCurrentUser];
+    if (!currentUser)
+    {
+        RIButtonItem *cancel = [RIButtonItem itemWithLabel:@"暂不登录"];
+        RIButtonItem *login = [RIButtonItem itemWithLabel:@"去登录" action:^{
+            LoginViewController *loginVC = [[LoginViewController alloc] init];
+            [self.navigationController pushViewController:loginVC animated:YES];
+        }];
+        
+            [UIAlertView alertWithTitle:nil message:@"当前是游客状态，登录后才能生成订单！" cancelButtonItem:cancel otherButtonItems:login , nil];
+        
+//        [alertToLogin show];
+    }
+    else
+    {
+        if (!self.orderBar.daysCount)
+        {
+            [UIAlertView alertWithDelegate:nil title:@"您还没有选择酒店" message:@"" cancel:@"确定" others:nil];
+            
+        }
+        else
+        {
+            OrderMessageConfirmViewController *viewController = [[OrderMessageConfirmViewController alloc] initWithDataModel:self.dataModel];
+            [self.navigationController pushViewController:viewController animated:YES];
+        }
+    }
 }
 
 /*

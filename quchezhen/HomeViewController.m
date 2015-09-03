@@ -16,12 +16,13 @@
 #import "UMSocial.h"
 
 #import "UIImageView+BmobDownLoad.h"
-#import "HomeViewItemDataModel.h"
-
+#import "WBLikeButton.h"
 #import "config.h"
+#import "HomeTableViewRouteCell.h"
 
-#define Tag_ImageView       1000
-#define Tag_IntroLabel      2000
+#define Tag_ImageView           1000
+#define Tag_IntroLabel          2000
+#define Tag_LikeNumberLabel     3000
 
 @interface HomeViewController ()
 
@@ -40,7 +41,7 @@
     self.tableView = [[UITableView alloc] initWithFrame:frame style:UITableViewStyleGrouped];
     self.tableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 5, 5)]; //更改header高度
     self.tableView.sectionHeaderHeight = 2;
-    self.tableView.sectionFooterHeight = 2;
+    self.tableView.sectionFooterHeight = 4;
     
     __block HomeViewController *_blockSelf = self;
     BmobQuery *query = [BmobQuery queryWithClassName:@"Route_1_0"];
@@ -57,7 +58,16 @@
     BmobUser *currentUser = [BmobUser getCurrentUser];
     if (currentUser != nil)
     {
-        rightButton = [[UIBarButtonItem alloc] initWithTitle:@"我" style:UIBarButtonItemStylePlain target:self action:@selector(openMe:)];
+////        rightButton = [[UIBarButtonItem alloc] initWithTitle:@"我" style:UIBarButtonItemStylePlain target:self action:@selector(openMe:)];
+//        rightButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"topbar-btn-information-default@3x.png"] style:UIBarButtonItemStylePlain target:self action:@selector(openMe:)];
+        
+//        [rightButton setTarget:self];
+//        [rightButton setAction:@selector(openMe:)];
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+        button.frame = CGRectMake(0, 0, 40, 40);
+        [button setBackgroundImage:[UIImage imageNamed:@"topbar-btn-information-default@3x.png"] forState:UIControlStateNormal];
+        [button addTarget:self action:@selector(openMe:) forControlEvents:UIControlEventTouchUpInside];
+        rightButton = [[UIBarButtonItem alloc] initWithCustomView:button];
     }
     else
     {
@@ -114,39 +124,15 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"feedCell"];
+    HomeTableViewRouteCell *cell = [tableView dequeueReusableCellWithIdentifier:@"feedCell"];
     if (!cell)
     {
-        cell  = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"feedCell"];
-        
-        UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 150)];
-        imgView.tag = Tag_ImageView;
-        [cell addSubview:imgView];
-        
-        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 150, self.tableView.frame.size.width, 30)];
-        label.tag = Tag_IntroLabel;
-        label.backgroundColor = [UIColor clearColor];
-        label.font = [UIFont systemFontOfSize:12];
-        [cell addSubview:label];
-        
-        cell.layer.cornerRadius = 5; //设置圆角
-        cell.clipsToBounds=YES;
+        cell  = [[HomeTableViewRouteCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"feedCell"];
     }
 
-    [self configureCell:cell atIndexPath:indexPath];
-    return cell;
-}
-
-- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
-{
     BmobObject *route = [self.routeBmobObjectArray objectAtIndex:indexPath.section];
-    NSString *introThumbName = [route objectForKey:@"baseIntroThumb"];
-    
-    UIImageView *imgView = (UIImageView*)[cell viewWithTag:Tag_ImageView];
-    [imgView resetWithDefaultImage:nil NewImageName:introThumbName andFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 150)];
-    
-    UILabel *label = (UILabel*)[cell viewWithTag:Tag_IntroLabel];
-    label.text = [route objectForKey:@"intro"];
+    [cell configureCellwithRouteObject:route];
+    return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath

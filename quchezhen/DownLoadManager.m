@@ -40,13 +40,20 @@
     return self;
 }
 
-- (void) loadImage:(NSString *)fileName forUIImageView:(UIImageView *)imageView
+- (void) loadImage:(NSString *)fileName forUIImageView:(UIImageView *)imageView withBlock:(void(^)(void))completeBlock
 {
     NSInteger index = [self.downloadFileNameList indexOfObject:fileName];
     if (index >= 0 && index < self.downloadFileNameList.count)
     {
         DownLoadItem *item = [self.downloadItemList objectAtIndex:index];
-        [item appendUIImageViewObserver:imageView];
+        if (imageView)
+        {
+            [item appendUIImageViewObserver:imageView];
+        }
+        if (completeBlock)
+        {
+            [item appendCompleteBlock:completeBlock progressBlock:nil];
+        }
     }
     else
     {
@@ -55,13 +62,22 @@
         [self.downloadFileNameList addObject:fileName];
         
         item.manager = self;
-        [item appendUIImageViewObserver:imageView];
+        if (imageView)
+        {
+            [item appendUIImageViewObserver:imageView];
+        }
+        if (completeBlock)
+        {
+            [item appendCompleteBlock:completeBlock progressBlock:nil];
+        }
         [item loadImage:fileName];
     }
 }
 
 - (void)loadFinished:(DownLoadItem *)item
 {
+    NSInteger index = [self.downloadItemList indexOfObject:item];
+    [self.downloadFileNameList removeObjectAtIndex:index];
     [self.downloadItemList removeObject:item];
 }
 

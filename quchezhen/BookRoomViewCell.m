@@ -10,6 +10,8 @@
 #import "CalendarHomeViewController.h"
 #import "HotelCard.h"
 #import "UIImageView+BmobDownLoad.h"
+#import "UIImageView+AFNetworking.h"
+#import "config.h"
 
 @interface BookRoomViewCell ()<HotelCardDelegate>
 
@@ -36,18 +38,19 @@
         self.hotelCardArray = [NSMutableArray arrayWithCapacity:5];
         
         self.width = width;
-        self.height = 30;
+        self.height = 32;
         CGRect checkinButtonRect = CGRectMake(0, 0, width, self.height);
         [self createCheckinDateButtonWithFrame:checkinButtonRect];
         
-//        UIImage *map = [UIImage imageNamed:dataModel.mapName];
-//        UIImageView *mapView = [[UIImageView alloc] initWithFrame:CGRectMake(0, self.height, width, 200)];
+        UIImageView *mapView = [[UIImageView alloc] initWithFrame:CGRectMake(0, self.height, width, 178)];
+        [mapView setImageWithURL:URL(dataModel.mapName)];
         
-        UIImageView *mapView = [[UIImageView alloc] initWithDefaultImage:nil NewImageName:dataModel.mapName andFrame:CGRectMake(0, self.height, width, 200)];
+        
+//        UIImageView *mapView = [[UIImageView alloc] initWithDefaultImage:nil NewImageName:dataModel.mapName andFrame:CGRectMake(0, self.height, width, 178)];
         
 //        mapView.image = map;
         [self addSubview:mapView];
-        self.height += 200;
+        self.height += 178;
 
         NSInteger i = 0;
         for (HotelCardDataModel *model in self.dataModel.hotelCardDataModels)
@@ -63,13 +66,13 @@
 - (void)createCheckinDateButtonWithFrame:(CGRect)frame
 {
     UIImageView *bgImageV = [[UIImageView alloc]initWithFrame:frame];
-    bgImageV.image = [UIImage imageNamed:@"navigationbar_background.png"];
+    bgImageV.image = [UIImage imageNamed:@"start-travl-bg-date-default@3x.png"];
     [self addSubview:bgImageV];
     
-    self.checkinDateLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 0 , frame.size.width, frame.size.height)];
+    self.checkinDateLabel = [[UILabel alloc] initWithFrame:CGRectMake(9, 0 , frame.size.width - 9, frame.size.height)];
     self.checkinDateLabel.backgroundColor = [UIColor clearColor];
     self.checkinDateLabel.font = [UIFont systemFontOfSize:14];
-    self.checkinDateLabel.text = [NSString stringWithFormat:@"%@--%@" , [self stringFromDate:self.beginDate] , [self stringFromDate:self.endDate]];
+    self.checkinDateLabel.text = [NSString stringWithFormat:@"%@ —— %@" , [self stringFromDate:self.beginDate] , [self stringFromDate:self.endDate]];
     [self addSubview:self.checkinDateLabel];
     
     UIButton *checkinDate = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -80,12 +83,12 @@
     UIButton *LessDay = [UIButton buttonWithType:UIButtonTypeCustom];
     LessDay.backgroundColor = [UIColor clearColor];
     [LessDay setImage:[UIImage imageNamed:@"less.png"] forState:UIControlStateNormal];
-    LessDay.frame = CGRectMake(frame.size.width - 130, 0, 30, frame.size.height);
+    LessDay.frame = CGRectMake(frame.size.width - 120, 2, 28, 28);
     LessDay.imageEdgeInsets = UIEdgeInsetsMake(3, 3, 3, 3);
     [LessDay addTarget:self action:@selector(lessDayButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:LessDay];
     
-    self.daysCount = [[UILabel alloc] initWithFrame:CGRectMake(frame.size.width - 90, 0 , 100, frame.size.height)];
+    self.daysCount = [[UILabel alloc] initWithFrame:CGRectMake(frame.size.width - 85, 0 , 100, frame.size.height)];
     self.daysCount.backgroundColor = [UIColor clearColor];
     self.daysCount.font = [UIFont systemFontOfSize:14];
     self.daysCount.text = [NSString stringWithFormat:@"共 %d 晚" , 1];
@@ -94,7 +97,7 @@
     UIButton *oneMoreDay = [UIButton buttonWithType:UIButtonTypeCustom];
     oneMoreDay.backgroundColor = [UIColor clearColor];
     [oneMoreDay setImage:[UIImage imageNamed:@"add.png"] forState:UIControlStateNormal];
-    oneMoreDay.frame = CGRectMake(frame.size.width - 35, 0, 30, frame.size.height);
+    oneMoreDay.frame = CGRectMake(frame.size.width - 35, 2, 28, 28);
     oneMoreDay.imageEdgeInsets = UIEdgeInsetsMake(3, 3, 3, 3);
     [self addSubview:oneMoreDay];
     [oneMoreDay addTarget:self action:@selector(oneMoreDayButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
@@ -114,6 +117,7 @@
     if (index == 0)
     {
         card.selected = YES;
+        [self cardIsSelectedWithDataModel:model CardIndex:index];
     }
     else
     {

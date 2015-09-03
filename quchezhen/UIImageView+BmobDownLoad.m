@@ -10,7 +10,7 @@
 #import "SDProgressView.h"
 
 #import <BmobSDK/BmobProFile.h>
-
+#import "NSFileManager+Utilities.h"
 #import "DownLoadManager.h"
 
 @implementation UIImageView(BmobDownLoad)
@@ -20,7 +20,7 @@
     self = [self initWithFrame:frame];
     if (self)
     {
-        [self resetWithDefaultImage:defaultImage NewImageName:imageName andFrame:frame];
+        [self resetWithDefaultImage:defaultImage NewImageName:imageName];
     }
     
     return self;
@@ -34,31 +34,65 @@
     return self;
 }
 
-- (void)resetWithDefaultImage:(UIImage *)defaultImage NewImageName:(NSString *)imageName andFrame:(CGRect)frame
+- (void)resetWithDefaultImageName:(NSString *)defaultImageName NewImageName:(NSString *)imageName
+{
+    [self resetWithDefaultImage:[UIImage imageNamed:defaultImageName] NewImageName:imageName];
+}
+
+- (void)resetWithDefaultImage:(UIImage *)defaultImage NewImageName:(NSString *)imageName
 {
     self.image = [UIImage imageNamed:imageName];
     if (!self.image)
     {
-        if (defaultImage)
+        NSString *path = CacheFilePath();
+        NSString *fileName = [NSFileManager pathForItemNamed:imageName inFolder:path];
+        
+        if (fileName)
+        {
+            self.image = [UIImage imageWithContentsOfFile:fileName];
+        }
+        
+        if (!self.image)
+        {
+            if (defaultImage)
             {
                 self.image = defaultImage;
             }
+            
+            [[DownLoadManager shareInstance] loadImage:imageName forUIImageView:self withBlock:nil];
+        }
+    }
+}
+
+- (void)loadImageName:(NSString *)imageName withBlock:(void(^)(void))completeBlock
+{
+    self.image = [UIImage imageNamed:imageName];
+    if (!self.image)
+    {
+        NSString *path = CacheFilePath();
+        NSString *fileName = [NSFileManager pathForItemNamed:imageName inFolder:path];
         
-//        [BmobProFile downloadFileWithFilename:imageName block:^(BOOL isSuccessful, NSError *error, NSString *filepath) {
-//            if (isSuccessful)
-//            {
-//                self.image = [UIImage imageNamed:filepath];
-//            }
-//            else
-//            {
-//                
-//            }
-//        } progress:^(CGFloat progress) {
-//            
-//        }];
-        
-        
-        [[DownLoadManager shareInstance] loadImage:imageName forUIImageView:self];
+        if (fileName)
+        {
+            self.image = [UIImage imageWithContentsOfFile:fileName];
+            if (completeBlock)
+            {
+                completeBlock();
+            }
+        }
+        else
+        {
+            [[DownLoadManager shareInstance] loadImage:imageName forUIImageView:self withBlock:^{
+                completeBlock();
+            }];
+        }
+    }
+    else
+    {
+        if (completeBlock)
+        {
+            completeBlock();
+        }
     }
 }
 

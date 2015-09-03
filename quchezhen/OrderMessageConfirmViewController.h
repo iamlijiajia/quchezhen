@@ -12,5 +12,7 @@
 @interface OrderMessageConfirmViewController : UIViewController<UITableViewDataSource , UITableViewDelegate>
 
 - (id)initWithDataModel:(RoomOrdersDataModel *)model;
+- (id)initToCheckOrderListWithRouteObject:(BmobObject *)routeObject;
+- (id)initWithOrderList:(NSArray *)orderlist;
 
 @end
